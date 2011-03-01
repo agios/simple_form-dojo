@@ -2,9 +2,11 @@
 
 Dora helps you sing with [Dojo](http://dojotoolkit.org) and [Rails](http://rubyonrails.org). Or, in more practical terms, she helps you create Dojo Toolkit markup in a Rails 3 environment. 
 
+Originally inspired by CodeOfficer's [JQuery UI Helpers](https://github.com/CodeOfficer/jquery-ui-rails-helpers)
+
 ## Requirements 
 
-Dora currently uses the 1.6rc1 branch of dojo, so it's still highly experimental. 
+Dora currently uses the 1.6rc1 branch of dojo, so it's still highly experimental. I don't include the 1.6 dojo toolkit files in the git repository. So, to run the dummy test rails environment you'll need to [grab a copy](http://download.dojotoolkit.org/) of the toolkit files and place them in the spec/dummy/public/javascripts/ directory to run the physical rails tests and see the generated markup correctly.
 
 ## DojoTabsHelper
 
