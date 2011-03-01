@@ -1,0 +1,7 @@
+<h1>Dora Test</h1>
+
+<%- dojo_tabs_for(:id => "user-tabs") do |tab| %>
+  <% tab.create('My First Tab', :id => 'tab-one') { 'My Content One' } %>
+  <% tab.create('My Second Tab') { 'My Content Two' } %>
+<%- end %>
+

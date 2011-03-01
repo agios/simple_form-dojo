@@ -23,3 +23,8 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+desc "Run watchr"
+task :watchr do
+  sh %{bundle exec watchr .watchr}
+end
