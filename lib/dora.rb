@@ -1,7 +1,6 @@
 require 'action_view'
 require 'dora/version'
-require 'dora/dojo_tabs_helper'
-# require 'helpers/dojo_tabs_helper'
+require 'dora/helpers/dojo_tabs_helper'
 
 module Dora
 end

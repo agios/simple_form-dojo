@@ -1,9 +1,36 @@
 module Dora
+  # = Dora Dojo Tabs Helper
   module Helpers
+    # Provides methods to generate HTML markup for dijit.layout.TabContainer objects 
+    #
+    # == 
     module DojoTabsHelper
+
+      # Returns an HTML block tag of type DIV with the appropriate dojo-data-type.
+      # You must pass a block of tabs as an argument. 
+      #
+      # ==== Options
+      # The +options+ hash is used to pass additional HTML attributes to the parent DIV.
+      # 
+      # The default dojo-data-props attribute is set to "doLayout:false".
+      #
+      # The default id attribute is set to "tabs".
+      #
+      # ==== Examples
+      # 
+      #   <% dojo_tabs_for do |tab| %>
+      #     <% tab.create('Tab Title One') do %>
+      #       #... tab contents
+      #     <% end %>
+      #   <% end %>
+      #   # => <div data-dojo-props="doLayout:false" data-dojo-type="dijit.layout.TabContainer" id="tabs">
+      #   # =>     <div data-dojo-props="title:'Tab Title One'" data-dojo-type="dijit.layout.ContentPane">
+      #   # =>         ... tab contents
+      #   # =>     </div>
+      #   # => </div>
       def dojo_tabs_for( *options, &block )
         raise ArgumentError, "Missing block" unless block_given?
-        raw DojoTabsHelper::TabsRenderer.new( *options, &block ).render
+        raw Dora::Helpers::DojoTabsHelper::TabsRenderer.new( *options, &block ).render
       end   
 
       class TabsRenderer
