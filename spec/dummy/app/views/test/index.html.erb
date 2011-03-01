@@ -1,7 +1,12 @@
 <h1>Dora Test</h1>
 
 <%- dojo_tabs_for(:id => "user-tabs") do |tab| %>
-  <% tab.create('My First Tab', :id => 'tab-one') { 'My Content One' } %>
-  <% tab.create('My Second Tab') { 'My Content Two' } %>
+  <% tab.create('My First Tab', :id => 'tab-one') { 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  ' } %>
+  <% tab.create('My Second Tab') { 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  
+  ' } %>
+  <% tab.create('My Third Tab') { 'This should not be show' } unless @current_user.nil? %>
+  <% tab.create('My Fourth Tab') { 'This should be shown' } %>
 <%- end %>
 

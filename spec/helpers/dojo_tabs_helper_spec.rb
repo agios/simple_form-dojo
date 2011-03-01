@@ -20,16 +20,16 @@ describe DojoTabsHelper do
       # puts @tabs.inspect
       render :text => @tabs
       assert_select "div[id='tabs']", 1
-      assert_select "div[dojo-data-type='dijit.layout.TabContainer']", 1
-      assert_select "div[dojo-data-props='doLayout:false']", 1
+      assert_select "div[data-dojo-type='dijit.layout.TabContainer']", 1
+      assert_select "div[data-dojo-props='doLayout:false']", 1
       # assert_select "div[id='tabs'] div[id='tab_one']", 1
       # assert_select "div[id='tabs'] div[id='tab_two']", 1
-      assert_select "div[id='tabs'] div[dojo-data-type='dijit.layout.ContentPane']", 2
-      assert_select "div[id='tabs'] div[dojo-data-props='title:\'One\'']", 1
-      assert_select "div[id='tabs'] div[dojo-data-props='title:\'Two\'']", 1
+      assert_select "div[id='tabs'] div[data-dojo-type='dijit.layout.ContentPane']", 2
+      assert_select "div[id='tabs'] div[data-dojo-props='title:\'One\'']", 1
+      assert_select "div[id='tabs'] div[data-dojo-props='title:\'Two\'']", 1
     end 
   end
-
+ 
   context "creating custom tabs" do
     before(:each) do
       @tabs = dojo_tabs_for(:id => "new_tabs") do |tab|

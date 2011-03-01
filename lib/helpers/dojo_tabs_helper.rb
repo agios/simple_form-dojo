@@ -20,8 +20,8 @@ module DojoTabsHelper
  
     def render
       content_tag( :div, raw([render_tabs].join), { :id => :tabs, 
-                                                    "dojo-data-props" => "doLayout:false", 
-                                                    "dojo-data-type" => "dijit.layout.TabContainer" 
+                                                    "data-dojo-props" => "doLayout:false", 
+                                                    "data-dojo-type" => "dijit.layout.TabContainer" 
                                                   }.merge(@options) )
     end
 
@@ -29,8 +29,8 @@ module DojoTabsHelper
  
     def render_tabs
       @tabs.collect do |tab| 
-        content_tag(:div, capture( &tab[2] ), tab[1].merge( "dojo-data-type" => "dijit.layout.ContentPane", 
-                                                            "dojo-data-props" => "title:'#{tab[0]}'"))
+        content_tag(:div, capture( &tab[2] ), tab[1].merge( "data-dojo-type" => "dijit.layout.ContentPane", 
+                                                            "data-dojo-props" => "title:'#{tab[0]}'"))
       end.join.to_s
     end
  

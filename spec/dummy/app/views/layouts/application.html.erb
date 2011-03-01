@@ -2,13 +2,27 @@
 <html>
 <head>
   <title>Dummy</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
+  <%= stylesheet_link_tag '/javascripts/dojo-toolkit/dojo/resources/dojo.css' %>
+  <%= stylesheet_link_tag '/javascripts/dojo-toolkit/dijit/themes/claro/claro.css' %>
+  <%= stylesheet_link_tag '/javascripts/dojo-toolkit/dojox/grid/resources/Grid.css' %>
+  <%= stylesheet_link_tag '/javascripts/dojo-toolkit/dojox/grid/resources/claroGrid.css' %>
   <%= csrf_meta_tag %>
 </head>
-<body>
+<body class="claro">
 
 <%= yield %>
 
+<script type="text/javascript">
+  var dojoConfig = {
+    parseOnLoad: true
+  };
+</script>
+<%= javascript_include_tag("dojo-toolkit/dojo/dojo.js") %>
+<%# <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js" %>
+<script type="text/javascript">
+  /* require dojo libraries */ 
+  dojo.require("dijit.layout.TabContainer");
+  dojo.require("dijit.layout.ContentPane");
+</script>
 </body>
 </html>
