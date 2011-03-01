@@ -1,6 +1,6 @@
 require 'spec_helper'
-
-describe DojoTabsHelper do
+  
+describe Dora::Helpers::DojoTabsHelper do
   context "creating tabs without a block" do
     it "should raise an error" do
       lambda{ @tabs = dojo_tabs_for }.should raise_error(ArgumentError)
