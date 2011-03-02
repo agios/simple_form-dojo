@@ -1,6 +1,5 @@
 require 'spec_helper'
-       
-# describe Dora::Helpers::DojoTabsHelper do
+         
 describe "DojoTabsHelperTest", :type => :helper do
   context "creating tabs without a block" do
     it "should raise an error" do
