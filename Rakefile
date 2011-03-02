@@ -28,3 +28,8 @@ desc "Run watchr"
 task :watchr do
   sh %{bundle exec watchr .watchr}
 end
+
+desc "Open an irb session preloaded with this library"
+task :console do
+  sh "irb -rubygems -r ./lib/dora.rb"
+end

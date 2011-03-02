@@ -5,7 +5,11 @@ module Dora
     #
     # == 
     module DojoTabsHelper
+      TEST = "This is a test"
 
+      def test_dojo_tabs
+        "You reached the DojoTabsHelper"
+      end
       # Returns an HTML block tag of type DIV with the appropriate dojo-data-type.
       # You must pass a block of tabs as an argument. 
       #
