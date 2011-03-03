@@ -44,6 +44,9 @@ module Dora
         def create(title, options={}, &block)
           raise "Block needed for TabsRenderer#CREATE" unless block_given?
           @tabs << [ title, options, block ]
+          # had to return an empty string. Otherwise, the @tabs object was being 
+          # returned when used with the <%= tab.create('title') %> syntax
+          return ''
         end
      
         def render
