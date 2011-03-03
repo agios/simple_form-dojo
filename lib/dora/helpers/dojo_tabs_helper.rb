@@ -17,8 +17,8 @@ module Dora
       #
       # ==== Examples
       # 
-      #   <% dojo_tabs_for do |tab| %>
-      #     <% tab.create('Tab Title One') do %>
+      #   <%= dojo_tabs_for do |tab| %>
+      #     <%= tab.create('Tab Title One') do %>
       #       #... tab contents
       #     <% end %>
       #   <% end %>

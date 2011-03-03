@@ -12,11 +12,11 @@ Dora currently uses the 1.6rc1 branch of dojo, so it's still highly experimental
 
 The tabs helper creates markup for dijit.layout.TabContainer. 
 
-    <% dojo_tabs_for do |tab| %>
-      <% tab.create('Tab Title One') do %>
+    <%= dojo_tabs_for do |tab| %>
+      <%= tab.create('Tab Title One') do %>
         #... tab contents
       <% end %>
-      <% tab.create('Tab Title Two') do %>
+      <%= tab.create('Tab Title Two') do %>
         #... tab contents
       <% end %>
     <% end %>
@@ -36,14 +36,14 @@ Tabs are rendered in the order you create them.
 
 Render tabs conditionally by appending a condition to the end of the 'create' block: 
 
-    <% tab.create('Conditional Tab') do %>
+    <%= tab.create('Conditional Tab') do %>
       #... tab contents
     <% end unless @current_user.nil? %>
 
 Pass additional HTML options to either the parent DIV or any child tab's: 
 
-    <% dojo_tabs_for(:id => 'my-id', :class => 'new-class', :data-dojo-props => 'doLayout:true') do |tab| %>
-      <% tab.create('Tab Title One', :style => 'color: #00f') do %>
+    <%= dojo_tabs_for(:id => 'my-id', :class => 'new-class', :data-dojo-props => 'doLayout:true') do |tab| %>
+      <%= tab.create('Tab Title One', :style => 'color: #00f') do %>
         #... tab contents
       <% end %>
     <% end %>
