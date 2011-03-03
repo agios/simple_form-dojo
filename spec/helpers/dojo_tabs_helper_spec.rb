@@ -15,9 +15,8 @@ describe "DojoTabsHelperTest", :type => :helper do
         tab.create('Two') { "Tab Two" }
       end
     end
-
+    
     it "should create the correct DOM structure" do
-      # puts @tabs.inspect
       render :text => @tabs
       assert_select "div[id='tabs']", 1
       assert_select "div[data-dojo-type='dijit.layout.TabContainer']", 1
