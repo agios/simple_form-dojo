@@ -1,8 +1,9 @@
 require 'action_view'
 require_relative 'dora/version'
-require_relative 'dora/helpers/dojo_tabs_helper'
+require_relative 'dora/helpers/tabs'
 
 module Dora
+  autoload :FormBuilder,    'dora/form_builder'
 end
 
-ActionView::Base.send(:include, Dora::Helpers::DojoTabsHelper)
+ActionView::Base.send(:include, Dora::Helpers::TabsHelper)

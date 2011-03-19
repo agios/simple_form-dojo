@@ -1,16 +1,16 @@
 require 'spec_helper'
          
-describe "DojoTabsHelperTest", :type => :helper do
+describe "Dora::Helpers::TabsHelper Test", :type => :helper do
   context "creating tabs without a block" do
     it "should raise an error" do
       # lambda { raise ArgumentError }.should raise_error
-      lambda{ @tabs = helper.dojo_tabs_for }.should raise_error(ArgumentError)
+      lambda{ @tabs = helper.dora_tabs_for }.should raise_error(ArgumentError)
     end
   end
  
   context "creating two tabs" do
     before(:each) do
-      @tabs = helper.dojo_tabs_for do |tab|
+      @tabs = helper.dora_tabs_for do |tab|
         tab.create('One') { "Tab One" }
         tab.create('Two') { "Tab Two" }
       end
@@ -29,7 +29,7 @@ describe "DojoTabsHelperTest", :type => :helper do
  
   context "creating custom tabs" do
     before(:each) do
-      @tabs = helper.dojo_tabs_for(:id => "new_tabs") do |tab|
+      @tabs = helper.dora_tabs_for(:id => "new_tabs") do |tab|
         tab.create('My Tab 1', :id => "tab-one") { 'My content' }
         tab.create('My Tab 2', :id => "tab-two") { 'My content' }
       end 

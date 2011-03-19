@@ -4,7 +4,7 @@ module Dora
     # Provides methods to generate HTML markup for dijit.layout.TabContainer objects 
     #
     # == 
-    module DojoTabsHelper
+    module TabsHelper
       # Returns an HTML block tag of type DIV with the appropriate dojo-data-type.
       # You must pass a block of tabs as an argument. 
       #
@@ -17,7 +17,7 @@ module Dora
       #
       # ==== Examples
       # 
-      #   <%= dojo_tabs_for do |tab| %>
+      #   <%= dora_tabs_for do |tab| %>
       #     <%= tab.create('Tab Title One') do %>
       #       #... tab contents
       #     <% end %>
@@ -27,9 +27,9 @@ module Dora
       #   # =>         ... tab contents
       #   # =>     </div>
       #   # => </div>
-      def dojo_tabs_for( *options, &block )
+      def dora_tabs_for( *options, &block )
         raise ArgumentError, "Missing block" unless block_given?
-        raw Dora::Helpers::DojoTabsHelper::TabsRenderer.new( *options, &block ).render
+        raw Dora::Helpers::TabsHelper::TabsRenderer.new( *options, &block ).render
       end   
 
       class TabsRenderer
