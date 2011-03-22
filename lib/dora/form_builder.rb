@@ -1,5 +1,6 @@
 module Dora
   class FormBuilder < SimpleForm::FormBuilder
-    # map_type :password, :text, :file,               :to => Dora::Inputs::MappingInput
+    include Dora::Inputs
+    map_type :string, :email, :search, :tel, :url, :to => Dora::Inputs::StringInput
   end
 end

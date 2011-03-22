@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Dora::Helpers::FormHelper Test", :typw => :helper do
+describe "Dora::Helpers::FormHelper Test", :type => :helper do
   before(:each) do
     helper.output_buffer = ""
     helper.stub(:url_for).and_return("")
@@ -13,4 +13,5 @@ describe "Dora::Helpers::FormHelper Test", :typw => :helper do
       f.should be_instance_of(Dora::FormBuilder)
     end
   end
+
 end
