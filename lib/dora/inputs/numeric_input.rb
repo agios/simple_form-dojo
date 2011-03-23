@@ -1,6 +1,6 @@
 module Dora
   module Inputs
-    class TimeInput < SimpleForm::Inputs::StringInput
+    class NumericInput < SimpleForm::Inputs::NumericInput
 
       include Common 
 
@@ -15,10 +15,11 @@ module Dora
       protected
 
       def dojo_type 
-        'dijit.form.TimeTextBox'
+        'dijit.form.NumberTextBox'
       end
 
     end
   end
 end
+
 

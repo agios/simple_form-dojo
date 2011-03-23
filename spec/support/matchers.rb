@@ -68,14 +68,17 @@ module Dora
         end
 
         def dojo_props_exist
-          tag_props = to_hash( @tag_selector_obj['data-dojo-props'].to_s )
+          # tag_props = to_hash( @tag_selector_obj['data-dojo-props'].to_s )
+          tag_props = ActiveSupport::JSON.decode(@tag_selector_obj['data-dojo-props']).symbolize_keys
+          # puts "Tag: #{tag_props.inspect}"
+          # puts "DP: #{@dojo_props.inspect}" 
           missing_msgs = [] 
           if @dojo_props.all? do |(key,value)|
               if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
                 true
               else
                 missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
-                missing_msgs << "\nTag Props: #{key} => '#{tag_props[value]}'" if tag_props.has_key?(key)
+                missing_msgs << "\nTag Props: #{key} => '#{tag_props[key]}'" if tag_props.has_key?(key)
                 missing_msgs << "\nExpected Props: #{key} => '#{value}'"
                 false
               end
@@ -95,7 +98,12 @@ module Dora
         end
         
         def attribute_exists?(name, value)
-          name.nil? || @tag_selector_obj[name] == value
+          name.nil? || if @tag_selector_obj[name] == value
+                          true
+                       else
+                          @missing = "\nIncorrect attribute: #{@tag_selector_obj[name]} != #{value}" 
+                          false
+                       end
         end
 
         def tag_selection_exists?

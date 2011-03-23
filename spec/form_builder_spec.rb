@@ -83,4 +83,21 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  context "with numeric input" do
+    before(:each) do
+      @html = with_form_for Project.new, :pay_rate, :dojo_html => {:constraints => {:min => 30, :max => 100}}
+      # @html = with_form_for Project.new, :pay_rate, :dojo_html => @dojo_props
+    end
+
+    it "should generate a NumberTextBox" do
+      @html.should have_tag_selector('input#project_pay_rate')
+        .with_dojo_type('dijit.form.NumberTextBox')
+    end
+
+    it "should generate a NumberTextBox with constraints" do
+      pending
+      @html.should have_tag_selector('input#project_pay_rateD')
+        .includes_dojo_props(:constraints => {:min => 30, :max => 100})
+    end
+  end
 end
