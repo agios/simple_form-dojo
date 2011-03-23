@@ -39,13 +39,16 @@ module Dora
             attribute_exists?(@attr_name, @attr_value)
         end
 
-        def failure_message
-          message = "Expected #{expectation} (#{@missing})"
-          message += "\nSubject was: #{@subject}"
+        def failure_message_for_should
+          message( "Expected #{expectation}: #{@missing}" )
         end
 
-        def negative_failure_message
-          "Did not expect #{expectation}"
+        def failure_message_for_should_not
+          message( "Did not expect #{expectation}" )
+        end
+
+        def message(msg)
+          msg += "\nSubject was #{@subject}"
         end
 
         def description
@@ -57,32 +60,42 @@ module Dora
         protected
 
         def dojo_type_exists?
-          # @dojo_type.nil? || @tag_selector_obj['data-dojo-type'].should == @dojo_type
           @dojo_type.nil? || attribute_exists?('data-dojo-type', @dojo_type)
         end
 
         def dojo_props_exist?
           @dojo_props.nil? || dojo_props_exist
-          # @dojo_props.nil? || (dojo_props_exist)
         end
 
         def dojo_props_exist
-          # expected_props = to_hash(@dojo_props) 
           tag_props = to_hash( @tag_selector_obj['data-dojo-props'].to_s )
-          @dojo_props.all? do |(key,value)|
-            tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
-          end.should == true 
+          missing_msgs = [] 
+          if @dojo_props.all? do |(key,value)|
+              if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
+                true
+              else
+                missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
+                missing_msgs << "\nTag Props: #{key} => '#{tag_props[value]}'" if tag_props.has_key?(key)
+                missing_msgs << "\nExpected Props: #{key} => '#{value}'"
+                false
+              end
+            end
+            true
+          else
+            @missing = missing_msgs.join(',')
+            false
+          end
         end
         
         # converts a sring like 'require:true, sometype:"type", "anothertype":"type"' 
         # to a hash like { :required => "true", :sometype: "type", :anothertype => "type"}
         def to_hash(s)
-          Hash[*s.scan(/(?:'|")?(\w+)(?:'|")?\s*:\s*(?:'|")?(\w+)(?:'|")?/).to_a.flatten].symbolize_keys!
+          # Hash[*s.scan(/(?:'|")?(\w+)(?:'|")?\s*:\s*(?:'|")?(\w+)(?:'|")?/).to_a.flatten].symbolize_keys!
+          Hash[*s.scan(/(?:'|")?([^']+)(?:'|")?\s*:\s*(?:'|")?([^']+)(?:'|")?(?:,)?/).to_a.flatten].symbolize_keys!
         end
         
         def attribute_exists?(name, value)
-          # @attr_name.nil? || @tag_selector_obj[@attr_name].should == @attr_value
-          name.nil? || @tag_selector_obj[name].should == value
+          name.nil? || @tag_selector_obj[name] == value
         end
 
         def tag_selection_exists?

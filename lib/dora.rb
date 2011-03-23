@@ -7,5 +7,6 @@ require_relative 'dora/helpers/form_helper'
 module Dora
   autoload :FormBuilder,      'dora/form_builder'
   autoload :Inputs,          'dora/inputs'
+  autoload :Common,          'dora/common'
 end
 

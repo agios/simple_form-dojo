@@ -17,8 +17,15 @@ end
 
 class Project < TablelessModel
   column :name, :string
+  column :summary, :string
+  column :start_time, :time
+
   has_many :tasks
+
   accepts_nested_attributes_for :tasks
+
+  # validations 
+  validates :name, :presence => true
 end
 
 class Task < TablelessModel
