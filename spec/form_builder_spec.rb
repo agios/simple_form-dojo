@@ -79,6 +79,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a TimeTextBox" do
       @html.should have_tag_selector('input#project_start_time')
+        .with_dojo_type('dijit.form.TimeTextBox')
     end
   end
 
