@@ -20,6 +20,7 @@ class Project < TablelessModel
   column :summary, :string
   column :start_time, :time
   column :pay_rate, :decimal
+  column :password, :string 
 
   has_many :tasks
 

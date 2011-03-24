@@ -12,7 +12,7 @@ describe "Dora::FormBuilder", :type => :helper do
     @dojo_props = {
       :promptMessage => 'Hey! Listen!', 
       :invalidMessage => 'Invalid error', 
-      :regExp => '\d{5}', 
+      :regExp => '\d{5}',
       :tooltipPosition => 'right' 
     }
   end
@@ -58,7 +58,19 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a ValidationTextBox with a tooltip property" do
       it_should_have_dojo_props(:tooltipPosition => @dojo_props[:tooltipPosition])
     end
+  end
 
+  context "with complex regular expression" do
+    before(:each) do 
+      @email_regex = '\A[\w!#$%&\'*+/=?`{|}~^-]+(?:\.[\w!#$%&\'*+/=?`{|}~^-]+)*@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\Z'
+      @html = with_form_for Project.new, :name, :dojo_html => { :regExp => @email_regex }
+    end
+
+    it "should generate a ValidationTextBox and handle a complicated regExp prop" do
+      pending
+      @html.should have_tag_selector('input#project_name')
+        .includes_dojo_props(:regExp => @email_regex)
+    end
   end
 
   context "with optional string attribute" do
@@ -95,9 +107,20 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should generate a NumberTextBox with constraints" do
-      pending
-      @html.should have_tag_selector('input#project_pay_rateD')
+      @html.should have_tag_selector('input#project_pay_rate')
         .includes_dojo_props(:constraints => {:min => 30, :max => 100})
+    end
+  end
+
+  context "with password input" do
+    before(:each) do
+      @html = with_form_for Project.new, :password
+    end
+
+    it "should generate a TextBox with type=password" do
+      @html.should have_tag_selector('input#project_password')
+        .with_dojo_type('dijit.form.TextBox')
+        .with_attr('type', 'password')
     end
   end
 end

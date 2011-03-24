@@ -68,13 +68,13 @@ module Dora
         end
 
         def dojo_props_exist
-          # tag_props = to_hash( @tag_selector_obj['data-dojo-props'].to_s )
-          tag_props = ActiveSupport::JSON.decode(@tag_selector_obj['data-dojo-props']).symbolize_keys
-          # puts "Tag: #{tag_props.inspect}"
-          # puts "DP: #{@dojo_props.inspect}" 
+          # Need to add the surrounding brackets back in, because Dora removes them before sending them 
+          # to input_html_options
+          tag_props = ActiveSupport::JSON.decode("{#{@tag_selector_obj['data-dojo-props']}}").symbolize_keys
           missing_msgs = [] 
           if @dojo_props.all? do |(key,value)|
-              if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
+              # if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
+              if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(@dojo_props[key])
                 true
               else
                 missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
@@ -89,6 +89,14 @@ module Dora
             false
           end
         end
+
+        def stringify(value)
+          if value.is_a? Hash
+            value.stringify_keys.to_s
+          else
+            value
+          end
+        end
         
         # converts a sring like 'require:true, sometype:"type", "anothertype":"type"' 
         # to a hash like { :required => "true", :sometype: "type", :anothertype => "type"}
@@ -99,11 +107,11 @@ module Dora
         
         def attribute_exists?(name, value)
           name.nil? || if @tag_selector_obj[name] == value
-                          true
-                       else
-                          @missing = "\nIncorrect attribute: #{@tag_selector_obj[name]} != #{value}" 
-                          false
-                       end
+            true
+          else
+            @missing = "\nIncorrect attribute: #{@tag_selector_obj[name]} != #{value}" 
+            false
+          end
         end
 
         def tag_selection_exists?
