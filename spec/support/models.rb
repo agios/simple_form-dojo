@@ -20,7 +20,9 @@ class Project < TablelessModel
   column :summary, :string
   column :start_time, :time
   column :pay_rate, :decimal
+  column :importance, :integer
   column :password, :string 
+  column :description, :text
 
   has_many :tasks
 
@@ -28,6 +30,9 @@ class Project < TablelessModel
 
   # validations 
   validates :name, :presence => true
+  # validates :importance, :numericality => true, :length => { :within => 1..5 } 
+  validates_numericality_of :importance, :only_integer => true, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5
+
 end
 
 class Task < TablelessModel

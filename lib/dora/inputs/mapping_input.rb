@@ -4,6 +4,8 @@ module Dora
     # source for details. 
     class MappingInput < SimpleForm::Inputs::MappingInput
       include Common 
+      
+      map_type :text_simple, :to => :text_area
 
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
@@ -16,15 +18,24 @@ module Dora
       protected
 
       def dojo_type 
-        if has_required?
-          'dijit.form.ValidationTextBox'
-        else
-          'dijit.form.TextBox'
+        case input_type
+        when :password
+          if has_required?
+            'dijit.form.ValidationTextBox'
+          else
+            'dijit.form.TextBox'
+          end
+        when :text
+          'dijit.form.TextArea'
+        when :text_simple
+          'dijit.form.SimpleTextArea'
+        when :file
+          raise('File fields have not been implemented yet!')
         end
       end
 
       def infer_dojo_props_from_validations!
-        @dojo_props = {}
+        @dojo_props ||= {}
         @dojo_props.merge!(:required => true) if has_required?
       end
       

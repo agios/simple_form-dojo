@@ -74,7 +74,7 @@ module Dora
           missing_msgs = [] 
           if @dojo_props.all? do |(key,value)|
               # if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
-              if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(@dojo_props[key])
+              if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(value)
                 true
               else
                 missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
@@ -92,7 +92,7 @@ module Dora
 
         def stringify(value)
           if value.is_a? Hash
-            value.stringify_keys.to_s
+            value.stringify_keys.sort_by{ |k,v| k.to_s }.to_s
           else
             value
           end

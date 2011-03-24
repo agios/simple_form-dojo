@@ -17,6 +17,23 @@ describe "Dora::FormBuilder", :type => :helper do
     }
   end
 
+  # FORM
+  context "with form wrapper" do
+    before(:each) do
+      @html = with_form_for Project.new, :name
+    end
+
+    it "should have a form element with a dora_form class" do
+      @html.should have_tag_selector('form.dora')
+    end
+
+    it "should have a form element with the dijit Form type" do
+      @html.should have_tag_selector('form#new_project.dora')
+        .with_dojo_type('dijit.form.Form')
+    end
+  end
+
+  # VALIDATED TEXT BOX
   context "with required string attribute" do
 
     def it_should_have_dojo_props(props)
@@ -60,6 +77,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  # REGEXP
   context "with complex regular expression" do
     before(:each) do 
       @email_regex = '\A[\w!#$%&\'*+/=?`{|}~^-]+(?:\.[\w!#$%&\'*+/=?`{|}~^-]+)*@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\Z'
@@ -73,6 +91,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  # TEXTBOX - no validattion
   context "with optional string attribute" do
     before(:each) do
       @html = with_form_for Project.new, :summary
@@ -84,6 +103,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  # TIME ATTRIBUTE
   context "with time attribute" do
     before(:each) do
       @html = with_form_for Project.new, :start_time
@@ -95,23 +115,40 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  # NUMERIC INPUT
   context "with numeric input" do
-    before(:each) do
-      @html = with_form_for Project.new, :pay_rate, :dojo_html => {:constraints => {:min => 30, :max => 100}}
-      # @html = with_form_for Project.new, :pay_rate, :dojo_html => @dojo_props
+    context " and constraints " do
+      before(:each) do
+        @html = with_form_for Project.new, :pay_rate, :dojo_html => {:constraints => {:min => 30, :max => 100}}
+        # @html = with_form_for Project.new, :pay_rate, :dojo_html => @dojo_props
+      end
+
+      it "should generate a NumberTextBox" do
+        @html.should have_tag_selector('input#project_pay_rate')
+          .with_dojo_type('dijit.form.NumberTextBox')
+      end
+
+      it "should generate a NumberTextBox with constraints" do
+        @html.should have_tag_selector('input#project_pay_rate')
+          .includes_dojo_props(:constraints => {:min => 30, :max => 100})
+      end
     end
 
-    it "should generate a NumberTextBox" do
-      @html.should have_tag_selector('input#project_pay_rate')
-        .with_dojo_type('dijit.form.NumberTextBox')
-    end
-
-    it "should generate a NumberTextBox with constraints" do
-      @html.should have_tag_selector('input#project_pay_rate')
-        .includes_dojo_props(:constraints => {:min => 30, :max => 100})
+    context " and constraints based off of validations " do
+      it "should generate a NumberTextBox with min/max constraints" do
+        @html = with_form_for Project.new, :importance
+        @html.should have_tag_selector('input#project_importance')
+          .includes_dojo_props(:constraints => {:min => 1, :max => 5, :places => 0 })
+      end
+      it "should override constraints with dojo_html" do
+        @html = with_form_for Project.new, :importance, :dojo_html => { :constraints => { :min => 2, :max => 20 } }
+        @html.should have_tag_selector('input#project_importance')
+          .includes_dojo_props(:constraints => { :min => 2, :max => 20 })
+      end
     end
   end
 
+  # PASSWORDk
   context "with password input" do
     before(:each) do
       @html = with_form_for Project.new, :password
@@ -121,6 +158,65 @@ describe "Dora::FormBuilder", :type => :helper do
       @html.should have_tag_selector('input#project_password')
         .with_dojo_type('dijit.form.TextBox')
         .with_attr('type', 'password')
+    end
+  end
+
+  # TEXT AREA
+  context "with text area input" do
+    it "should generate a TextArea with a style attribute" do
+      @html = with_form_for Project.new, :description, :input_html => {:style => 'width:300px'}
+      @html.should have_tag_selector('textarea#project_description')
+        .with_dojo_type('dijit.form.TextArea')
+        .with_attr('style', 'width:300px')
+    end
+
+    it "should generate a SimpleTextArea with a style attribute" do
+      @html = with_form_for Project.new, :description, :as => :text_simple
+      @html.should have_tag_selector('textarea#project_description')
+        .with_dojo_type('dijit.form.SimpleTextArea')
+    end
+  end
+
+  # ASSOCIATIONS 
+  context "with associations" do
+    it "should generate a CheckBox with a type=checkbox attribute" do
+      pending
+    end
+
+    it "should generatea a RadioButton with a type=radio attribute" do
+      pending
+    end
+  end
+
+  # DORA_FIELDS_FOR
+  context "with dora_fields_for" do
+    it "should generate a ValidationTextBox" do
+      @html = with_fields_for Project.new, :name
+      @html.should have_tag_selector('input#project_name')
+        .with_dojo_type('dijit.form.ValidationTextBox')
+    end
+
+    it "should not generate a surrounding form tag" do
+      @hml = with_fields_for Project.new, :name
+      @html.should_not have_tag_selector('form')
+    end
+  end
+
+  # BUTTONS
+  context "button" do
+    it "should create a button element" do
+      @html = with_button_for :post, :submit
+      @html.should have_tag_selector("form button.button")
+        .with_dojo_type('dijit.form.Button')
+        .includes_dojo_props(:type => 'submit')
+
+    end
+
+    it "should create buttons for new records" do
+      @html = with_button_for Project.new, :submit
+      @html.should have_tag_selector("form button.button")
+        .with_dojo_type('dijit.form.Button')
+        .includes_dojo_props(:type => 'submit')
     end
   end
 end
