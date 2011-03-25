@@ -2,13 +2,12 @@ module Dora
   module Inputs
     class StringInput < SimpleForm::Inputs::StringInput
 
-      include Common 
+      include DojoProps 
 
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
         infer_dojo_props_from_validations!
-        get_dojo_props_from_options!
-        merge_dojo_props!
+        get_and_merge_dojo_props!
         super
       end
 

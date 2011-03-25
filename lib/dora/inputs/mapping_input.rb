@@ -3,15 +3,14 @@ module Dora
     # Uses MapType to handle basic input types. See the original simple_form 
     # source for details. 
     class MappingInput < SimpleForm::Inputs::MappingInput
-      include Common 
+      include DojoProps 
       
       map_type :text_simple, :to => :text_area
 
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
         infer_dojo_props_from_validations!
-        get_dojo_props_from_options!
-        merge_dojo_props!
+        get_and_merge_dojo_props!
         super
       end
 
