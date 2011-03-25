@@ -19,17 +19,26 @@ describe "Dora::FormBuilder", :type => :helper do
 
   # FORM
   context "with form wrapper" do
-    before(:each) do
-      @html = with_form_for Project.new, :name
-    end
 
     it "should have a form element with a dora_form class" do
+      @html = with_form_for Project.new, :name
       @html.should have_tag_selector('form.dora')
     end
 
     it "should have a form element with the dijit Form type" do
+      @html = with_form_for Project.new, :name
       @html.should have_tag_selector('form#new_project.dora')
         .with_dojo_type('dijit.form.Form')
+    end
+
+    it "should have a form with an id and a data-dojo-id" do
+      args = 
+      data = helper.dora_form_for( Project.new, :html => { :id => 'my-test' } ) do |f|
+        f.input :name
+      end
+      html = concat(data)
+      html.should have_tag_selector('form#my-test')
+        .with_attr('data-dojo-id', 'my-test')
     end
   end
 

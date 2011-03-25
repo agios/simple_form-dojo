@@ -3,9 +3,13 @@ module Dora
     module FormHelper
       
       def dora_form_for(*args, &block)
+
         options = args.extract_options!.reverse_merge(:builder => Dora::FormBuilder,
-                                                      :html => { :class => 'dora',
-                                                                 :'data-dojo-type' => 'dijit.form.Form' })
+                                                      :html => { :class => 'dora' })
+
+        options[:html][:'data-dojo-id'] ||= options[:html][:id] if options[:html][:id]
+        # options[:html][:'data-dojo-type'] ||= 'dijit.form.Form'
+
         simple_form_for(*(args << options), &block).tap do |output|
           form_callbacks.each do |callback|
             output << callback.call
