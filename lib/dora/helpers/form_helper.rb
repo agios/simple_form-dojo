@@ -8,7 +8,7 @@ module Dora
                                                       :html => { :class => 'dora' })
 
         options[:html][:'data-dojo-id'] ||= options[:html][:id] if options[:html][:id]
-        # options[:html][:'data-dojo-type'] ||= 'dijit.form.Form'
+        options[:html][:'data-dojo-type'] ||= 'dijit.form.Form'
 
         simple_form_for(*(args << options), &block).tap do |output|
           form_callbacks.each do |callback|
