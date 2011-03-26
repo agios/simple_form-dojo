@@ -188,8 +188,10 @@ describe "Dora::FormBuilder", :type => :helper do
 
   # ASSOCIATIONS 
   context "with associations" do
+
     it "should generate a CheckBox with a type=checkbox attribute" do
       pending
+      # @html = with_association_for Project.new, :tasks
     end
 
     it "should generatea a RadioButton with a type=radio attribute" do
@@ -238,6 +240,33 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should have the correct name in data-dojo-props" do
       @html.should have_tag_selector("input#project_name")
         .includes_dojo_props(:name => 'project[name]')
+    end
+  end
+
+  # data-dojo-props[TYPE]
+  context "type value in data-dojo-props" do
+    it "should have type=text in data-dojo-props" do
+      @html = with_form_for Project.new, :name
+      @html.should have_tag_selector('input#project_name') 
+        .includes_dojo_props(:type => 'text')
+    end
+
+    it "should have type=password in data-dojo-props" do
+      @html = with_form_for Project.new, :password
+      @html.should have_tag_selector('input#project_password') 
+        .includes_dojo_props(:type => 'password')
+    end
+    
+    it "should have type=text for time fields in data-dojo-props" do
+      @html = with_form_for Project.new, :start_time
+      @html.should have_tag_selector('input#project_start_time') 
+        .includes_dojo_props(:type => 'text')
+    end
+
+    it "should have type=text for number fields in data-dojo-props" do
+      @html = with_form_for Project.new, :pay_rate
+      @html.should have_tag_selector('input#project_pay_rate') 
+        .includes_dojo_props(:type => 'text')
     end
   end
 end

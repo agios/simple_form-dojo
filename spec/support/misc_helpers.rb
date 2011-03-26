@@ -41,4 +41,9 @@ def with_button_for(object, *args)
   end
 end
 
+def with_association_for(object, *args)
+  with_concat_form_for(object) do |f|
+    f.association(*args)
+  end
+end
 

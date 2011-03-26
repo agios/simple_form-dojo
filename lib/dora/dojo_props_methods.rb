@@ -38,22 +38,48 @@ module Dora
     # See: http://bugs.dojotoolkit.org/ticket/11490
     def add_default_attributes_to_dojo_props
       @dojo_props ||= {}
-      add_default_name_and_id_to_dojo_props 
+      add_default_name_to_dojo_props 
+      add_default_type_to_dojo_props
+
       # @dojo_props[:value] ||= add_default_value_to_dojo_props
     end
 
     ##
     # Follows the basic routines as rails does to determine the 
     # name and id of the tag 
-    def add_default_name_and_id_to_dojo_props
+    def add_default_name_to_dojo_props
       opts = input_html_options
       if opts.has_key?("index")
         @dojo_props[:name] ||= dojo_tag_name_with_index(opts["index"])
         # @dojo_props[:id] = opts.fetch("id") { dojo_tag_id_with_index(opts["index"]) }
       else
-        @dojo_props[:name] ||= dojo_tag_name + (opts.has_key?('multiple') ? '[]' : '')
+        @dojo_props[:name] ||= dojo_tag_name + (add_multiple_to_name?(opts) ? '[]' : '')
         # @dojo_props[:id] ||= opts.fetch("id") { dojo_tag_id }
       end
+    end
+
+    def add_multiple_to_name?(options)
+      options.has_key?(:multiple) || 
+        input_type == :check_boxes
+    end
+
+    ## 
+    # Get the dojo input type 
+    def add_default_type_to_dojo_props
+      dtype = nil
+      unless [:text].include?(input_type)
+        case input_type
+        when :password
+          dtype = 'password'
+        when :check_boxes, :checkbox
+          dtype = 'checkbox'
+        when :boolean, :radio
+          dtype = 'radio'
+        else
+          dtype = 'text'
+        end
+      end
+      @dojo_props[:type] = dtype unless dtype.nil? 
     end
 
     def dojo_tag_name_with_index(index)
