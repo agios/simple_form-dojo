@@ -5,8 +5,8 @@ require_relative 'dora/helpers/tabs_helper'
 require_relative 'dora/helpers/form_helper'
 
 module Dora
-  autoload :FormBuilder,      'dora/form_builder'
-  autoload :Inputs,          'dora/inputs'
-  autoload :DojoProps,       'dora/dojo_props'
+  autoload :FormBuilder,        'dora/form_builder'
+  autoload :Inputs,             'dora/inputs'
+  autoload :DojoPropsMethods,   'dora/dojo_props_methods'
 end
 

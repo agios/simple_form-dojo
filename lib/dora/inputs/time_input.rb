@@ -2,7 +2,7 @@ module Dora
   module Inputs
     class TimeInput < SimpleForm::Inputs::StringInput
 
-      include DojoProps 
+      include DojoPropsMethods
 
       def input
         input_html_options[:type] = :text

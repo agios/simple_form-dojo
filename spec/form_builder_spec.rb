@@ -228,4 +228,16 @@ describe "Dora::FormBuilder", :type => :helper do
         .includes_dojo_props(:type => 'submit')
     end
   end
+
+  # data-dojo-props[NAME]
+  context "name value in data-dojo-props" do
+    before(:each) do
+      @html = with_form_for Project.new, :name
+    end
+
+    it "should have the correct name in data-dojo-props" do
+      @html.should have_tag_selector("input#project_name")
+        .includes_dojo_props(:name => 'project[name]')
+    end
+  end
 end

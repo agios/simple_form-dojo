@@ -2,7 +2,7 @@ module Dora
   module Inputs
     class CollectionInput < SimpleForm::Inputs::CollectionInput
 
-      include DojoProps
+      include DojoPropsMethods
 
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
