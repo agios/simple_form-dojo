@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @project.name %>
+</p>
+
+<p>
+  <b>Summary:</b>
+  <%= @project.summary %>
+</p>
+
+<p>
+  <b>Start time:</b>
+  <%= @project.start_time %>
+</p>
+
+<p>
+  <b>Pay rate:</b>
+  <%= @project.pay_rate %>
+</p>
+
+<p>
+  <b>Importance:</b>
+  <%= @project.importance %>
+</p>
+
+<p>
+  <b>Password:</b>
+  <%= @project.password %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @project.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %>

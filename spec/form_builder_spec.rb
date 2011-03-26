@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe "Dora::FormBuilder", :type => :helper do
-
+  
   before(:each) do
-    helper.output_buffer = ""
-    helper.stub(:url_for).and_return("")
-    helper.stub(:projects_path).and_return("")
-    helper.stub(:protect_against_forgery?).and_return(false)
-    # let(:project) { Project.new }
+    # helper.output_buffer = ""
+    # helper.stub(:url_for).and_return("")
+    # helper.stub(:projects_path).and_return("")
+    # helper.stub(:protect_against_forgery?).and_return(false)
+    # # let(:project) { Project.new }
     
     @dojo_props = {
       :promptMessage => 'Hey! Listen!', 
@@ -188,10 +188,15 @@ describe "Dora::FormBuilder", :type => :helper do
 
   # ASSOCIATIONS 
   context "with associations" do
-
+    before(:each) do
+      (1..3).each do |n|
+        Task.create!(:name => "Task #{n}") 
+      end
+    end
     it "should generate a CheckBox with a type=checkbox attribute" do
-      pending
-      # @html = with_association_for Project.new, :tasks
+      @html = with_association_for Project.new, :tasks, :as => :check_boxes 
+      @html.should have_tag_selector('input#project_task_ids_1')
+        .includes_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
     end
 
     it "should generatea a RadioButton with a type=radio attribute" do
@@ -216,7 +221,7 @@ describe "Dora::FormBuilder", :type => :helper do
   # BUTTONS
   context "button" do
     it "should create a button element" do
-      @html = with_button_for :post, :submit
+      @html = with_button_for Project.new, :submit
       @html.should have_tag_selector("form button.button")
         .with_dojo_type('dijit.form.Button')
         .includes_dojo_props(:type => 'submit')
@@ -246,8 +251,8 @@ describe "Dora::FormBuilder", :type => :helper do
   # data-dojo-props[TYPE]
   context "type value in data-dojo-props" do
     it "should have type=text in data-dojo-props" do
-      @html = with_form_for Project.new, :name
-      @html.should have_tag_selector('input#project_name') 
+      @html = with_form_for User.new, :name
+      @html.should have_tag_selector('input#user_name') 
         .includes_dojo_props(:type => 'text')
     end
 
