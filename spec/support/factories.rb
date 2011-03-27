@@ -22,3 +22,6 @@ Factory.define :task do |task|
   task.complete   false
 end
 
+Factory.define :project_with_task, :parent => :project do |proj|
+  proj.tasks { |tasks| [tasks.association(:task), tasks.association(:task)] }
+end

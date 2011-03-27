@@ -2,11 +2,19 @@ module Dora
   class FormBuilder < SimpleForm::FormBuilder
     include Dora::Inputs
 
+    attr_accessor :dojo_props
+
     map_type :time,                                 :to => Dora::Inputs::TimeInput
     map_type :radio, :check_boxes,                  :to => Dora::Inputs::CollectionInput
     map_type :integer, :decimal, :float,            :to => Dora::Inputs::NumericInput
     map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput
     map_type :string, :email, :search, :tel, :url,  :to => Dora::Inputs::StringInput
+
+    # Simple override of initializer in order to add in the dojo_props attribute
+    def initialize(object_name, object, template, options, proc)
+      @dojo_props = nil
+      super(object_name, object, template, options, proc)
+    end
 
     # Creates a button
     # 
@@ -48,6 +56,48 @@ module Dora
       defaults << "#{key.to_s.humanize} #{model}"
 
       I18n.t(defaults.shift, :default => defaults)
+    end
+
+    def dojo_collection_radio(attribute, collection, value_method, 
+                              text_method, options={}, html_options={})
+      render_collection(
+        attribute, collection, value_method, text_method, options, html_options
+      ) do |value, text, default_html_options|
+        # add in the dojo_props[:value]
+        @dojo_props[:value] = value
+        default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        radio = radio_button(attribute, value, default_html_options)
+        collection_label(attribute, value, radio, text, :class => 'collection_radio')
+      end
+    end
+
+    def dojo_collection_check_boxes(attribute, collection, value_method, 
+                                    text_method, options={}, html_options={})
+      render_collection(
+        attribute, collection, value_method, text_method, options, html_options
+      ) do |value, text, default_html_options|
+        default_html_options[:multiple] = true
+        # add in the dojo_props[:value]
+        @dojo_props[:value] = value
+        default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        check_box = check_box(attribute, default_html_options, value, '')
+        collection_label(attribute, value, check_box, text, :class => 'collection_check_boxes')
+      end
+    end
+
+    ## 
+    # JSON encodes the props hash, 
+    # then translates double-quotes to single-quotes, 
+    # then translates double-backslashes to single-backslashes for regex issues, 
+    # then removes the surrounding brackets ({...}) from the result 
+    # All of this is required in order to place this into a 
+    # string format compatible with data-dojo-props parsing
+    def encode_as_dojo_props(options)
+      ActiveSupport::JSON.encode(options)
+        .to_s
+        .tr('"',"'")
+        .sub(/\\\\/, '\\')
+        .slice(1..-2)
     end
 
   end

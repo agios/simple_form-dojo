@@ -20,8 +20,17 @@ module Dora
         end
 
         # Expects a hash in props
-        def includes_dojo_props(props)
+        def with_dojo_props(props)
           @dojo_props = props.symbolize_keys
+          self
+        end
+
+        # Expects a hash in props
+        # - the negative of with, this 
+        # method looks to ensure that the properties 
+        # do not exist within data-dojo-props
+        def without_dojo_props(props)
+          @dojo_props_without = props.symbolize_keys
           self
         end
 
@@ -31,11 +40,18 @@ module Dora
           self
         end
 
+        def with_content(value)
+          @tag_content = value
+          self
+        end
+
         def matches?(subject)
           @subject = subject
           tag_selection_exists? &&
             dojo_type_exists? && 
-            dojo_props_exist? && 
+            dojo_props_exist? &&
+            dojo_props_do_not_exist? &&
+            content_exists? &&
             attribute_exists?(@attr_name, @attr_value)
         end
 
@@ -64,16 +80,24 @@ module Dora
         end
 
         def dojo_props_exist?
-          @dojo_props.nil? || dojo_props_exist
+          @dojo_props.nil? || dojo_props_exist(@dojo_props)
         end
 
-        def dojo_props_exist
+        def dojo_props_do_not_exist?
+          @dojo_props_without.nil? || !dojo_props_exist(@dojo_props_without)
+        end
+
+        def content_exists?
+          @tag_content.nil? || content_exists
+        end
+
+        def dojo_props_exist(props)
           # Need to add the surrounding brackets back in, because Dora removes them before sending them 
           # to input_html_options
           tag_props = ActiveSupport::JSON.decode("{#{@tag_selector_obj['data-dojo-props']}}").symbolize_keys
           missing_msgs = [] 
-          if @dojo_props.all? do |(key,value)|
-              # if tag_props.has_key?(key) && tag_props[key].to_s == @dojo_props[key].to_s
+          if props.all? do |(key,value)|
+              # if tag_props.has_key?(key) && tag_props[key].to_s == props[key].to_s
               if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(value)
                 true
               else
@@ -103,6 +127,17 @@ module Dora
         def to_hash(s)
           # Hash[*s.scan(/(?:'|")?(\w+)(?:'|")?\s*:\s*(?:'|")?(\w+)(?:'|")?/).to_a.flatten].symbolize_keys!
           Hash[*s.scan(/(?:'|")?([^']+)(?:'|")?\s*:\s*(?:'|")?([^']+)(?:'|")?(?:,)?/).to_a.flatten].symbolize_keys!
+        end
+
+        def content_exists
+          if !@tag_selector_obj.content.nil? && @tag_selector_obj.content.strip == @tag_content.strip
+            true
+          else
+            @missing = "\nContent not found!"
+            @missing += "\nFound: #{@tag_selector_obj.content}"
+            @missing += "\nExpected: #{@tag_content}"
+            false
+          end
         end
         
         def attribute_exists?(name, value)

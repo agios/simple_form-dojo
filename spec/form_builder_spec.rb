@@ -10,8 +10,8 @@ describe "Dora::FormBuilder", :type => :helper do
     # # let(:project) { Project.new }
     
     @dojo_props = {
-      :promptMessage => 'Hey! Listen!', 
-      :invalidMessage => 'Invalid error', 
+      :promptMessage => 'This value is required', 
+      :invalidMessage => 'Missing value', 
       :regExp => '\d{5}',
       :tooltipPosition => 'right' 
     }
@@ -47,7 +47,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     def it_should_have_dojo_props(props)
       @html.should have_tag_selector('input#project_name')
-        .includes_dojo_props(props)
+        .with_dojo_props(props)
     end
 
     before(:each) do
@@ -66,7 +66,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a ValidationTextBox" do
       @html.should have_tag_selector('input#project_name')
         .with_dojo_type('dijit.form.ValidationTextBox')
-        .includes_dojo_props(:required => true)
+        .with_dojo_props(:required => true)
     end
 
     it "should generate a ValidationTextBox with a prompt message" do
@@ -96,7 +96,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a ValidationTextBox and handle a complicated regExp prop" do
       pending
       @html.should have_tag_selector('input#project_name')
-        .includes_dojo_props(:regExp => @email_regex)
+        .with_dojo_props(:regExp => @email_regex)
     end
   end
 
@@ -139,7 +139,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
       it "should generate a NumberTextBox with constraints" do
         @html.should have_tag_selector('input#project_pay_rate')
-          .includes_dojo_props(:constraints => {:min => 30, :max => 100})
+          .with_dojo_props(:constraints => {:min => 30, :max => 100})
       end
     end
 
@@ -147,12 +147,12 @@ describe "Dora::FormBuilder", :type => :helper do
       it "should generate a NumberTextBox with min/max constraints" do
         @html = with_form_for Project.new, :importance
         @html.should have_tag_selector('input#project_importance')
-          .includes_dojo_props(:constraints => {:min => 1, :max => 5, :places => 0 })
+          .with_dojo_props(:constraints => {:min => 1, :max => 5, :places => 0 })
       end
       it "should override constraints with dojo_html" do
         @html = with_form_for Project.new, :importance, :dojo_html => { :constraints => { :min => 2, :max => 20 } }
         @html.should have_tag_selector('input#project_importance')
-          .includes_dojo_props(:constraints => { :min => 2, :max => 20 })
+          .with_dojo_props(:constraints => { :min => 2, :max => 20 })
       end
     end
   end
@@ -190,19 +190,19 @@ describe "Dora::FormBuilder", :type => :helper do
   context "with associations" do
     before(:each) do
       @project = Factory(:project)
-      @factory = Factory(:task)
-      Task.stub(:all).and_return([@factory])
+      @task = Factory(:task)
+      Task.stub(:all).and_return([@task])
     end
     it "should generate a CheckBox with a type=checkbox attribute" do
       @html = with_association_for @project, :tasks, :as => :check_boxes 
-      @html.should have_tag_selector("input#project_task_ids_#{@factory.id}")
-        .includes_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
+      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+        .with_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
     end
 
     it "should generate a RadioButton with a type=radio attribute" do
       @html = with_association_for Project.new, :tasks, :as => :radio 
-      @html.should have_tag_selector("input#project_task_ids_#{@factory.id}")
-        .includes_dojo_props(:type => 'radio', :name => 'project[task_ids]')
+      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+        .with_dojo_props(:type => 'radio', :name => 'project[task_ids]')
     end
 
     it "should generate a FilteringSelect box"
@@ -229,7 +229,7 @@ describe "Dora::FormBuilder", :type => :helper do
       @html = with_button_for Project.new, :submit
       @html.should have_tag_selector("form button.button")
         .with_dojo_type('dijit.form.Button')
-        .includes_dojo_props(:type => 'submit')
+        .with_dojo_props(:type => 'submit')
 
     end
 
@@ -237,7 +237,7 @@ describe "Dora::FormBuilder", :type => :helper do
       @html = with_button_for Project.new, :submit
       @html.should have_tag_selector("form button.button")
         .with_dojo_type('dijit.form.Button')
-        .includes_dojo_props(:type => 'submit')
+        .with_dojo_props(:type => 'submit')
     end
   end
 
@@ -249,7 +249,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should have the correct name in data-dojo-props" do
       @html.should have_tag_selector("input#project_name")
-        .includes_dojo_props(:name => 'project[name]')
+        .with_dojo_props(:name => 'project[name]')
     end
   end
 
@@ -258,25 +258,25 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should have type=text in data-dojo-props" do
       @html = with_form_for User.new, :name
       @html.should have_tag_selector('input#user_name') 
-        .includes_dojo_props(:type => 'text')
+        .with_dojo_props(:type => 'text')
     end
 
     it "should have type=password in data-dojo-props" do
       @html = with_form_for Project.new, :password
       @html.should have_tag_selector('input#project_password') 
-        .includes_dojo_props(:type => 'password')
+        .with_dojo_props(:type => 'password')
     end
     
     it "should have type=text for time fields in data-dojo-props" do
       @html = with_form_for Project.new, :start_time
       @html.should have_tag_selector('input#project_start_time') 
-        .includes_dojo_props(:type => 'text')
+        .with_dojo_props(:type => 'text')
     end
 
     it "should have type=text for number fields in data-dojo-props" do
       @html = with_form_for Project.new, :pay_rate
       @html.should have_tag_selector('input#project_pay_rate') 
-        .includes_dojo_props(:type => 'text')
+        .with_dojo_props(:type => 'text')
     end
   end
 end
