@@ -2,6 +2,8 @@ require 'rubygems'
 require 'spork'
 require 'active_record'
 require 'nokogiri'
+require 'factory_girl_rails' 
+require 'database_cleaner' 
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -18,6 +20,19 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.mock_with :rspec
+
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
+    end
+
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 
 end
@@ -91,4 +106,16 @@ RSpec.configure do |config|
 
   # == Mock Framework
   config.mock_with :rspec
+  # config.before(:suite) do
+  #   DatabaseCleaner.clean_with(:truncation)
+  #   DatabaseCleaner.strategy = :transaction
+  # end
+
+  # config.before(:each) do
+  #   DatabaseCleaner.start
+  # end
+
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
 end

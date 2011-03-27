@@ -189,19 +189,24 @@ describe "Dora::FormBuilder", :type => :helper do
   # ASSOCIATIONS 
   context "with associations" do
     before(:each) do
-      (1..3).each do |n|
-        Task.create!(:name => "Task #{n}") 
-      end
+      @project = Factory(:project)
+      @factory = Factory(:task)
+      Task.stub(:all).and_return([@factory])
     end
     it "should generate a CheckBox with a type=checkbox attribute" do
-      @html = with_association_for Project.new, :tasks, :as => :check_boxes 
-      @html.should have_tag_selector('input#project_task_ids_1')
+      @html = with_association_for @project, :tasks, :as => :check_boxes 
+      @html.should have_tag_selector("input#project_task_ids_#{@factory.id}")
         .includes_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
     end
 
-    it "should generatea a RadioButton with a type=radio attribute" do
-      pending
+    it "should generate a RadioButton with a type=radio attribute" do
+      @html = with_association_for Project.new, :tasks, :as => :radio 
+      @html.should have_tag_selector("input#project_task_ids_#{@factory.id}")
+        .includes_dojo_props(:type => 'radio', :name => 'project[task_ids]')
     end
+
+    it "should generate a FilteringSelect box"
+    it "should generate a ComboBox"
   end
 
   # DORA_FIELDS_FOR

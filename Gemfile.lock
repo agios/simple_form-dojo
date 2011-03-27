@@ -49,6 +49,7 @@ GEM
     childprocess (0.1.7)
       ffi (~> 0.6.3)
     culerity (0.2.15)
+    database_cleaner (0.6.6)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -122,8 +123,9 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (~> 0.4.1.2)
+  database_cleaner
   dora!
-  factory_girl_rails (~> 1.0.1)
+  factory_girl_rails (= 1.0.1)
   nokogiri (~> 1.4.4)
   rails (~> 3.0.5)
   rspec (~> 2.5.0)

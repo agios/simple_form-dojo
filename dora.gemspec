@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "watchr"
   s.add_development_dependency "spork", "~> 0.9.0.rc2"
   s.add_development_dependency "sqlite3-ruby", "1.2.5"
-  s.add_development_dependency "factory_girl_rails", "~> 1.0.1"
+  s.add_development_dependency "factory_girl_rails", "1.0.1"
+  s.add_development_dependency "database_cleaner"
 
 end
