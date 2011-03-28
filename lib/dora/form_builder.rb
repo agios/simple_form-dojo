@@ -4,7 +4,8 @@ module Dora
 
     attr_accessor :dojo_props
 
-    map_type :time,                                 :to => Dora::Inputs::TimeInput
+    map_type :currency,                             :to => Dora::Inputs::CurrencyInput
+    map_type :date, :time, :datetime,               :to => Dora::Inputs::DateTimeInput
     map_type :select, :radio, :check_boxes,         :to => Dora::Inputs::CollectionInput
     map_type :integer, :decimal, :float,            :to => Dora::Inputs::NumericInput
     map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput

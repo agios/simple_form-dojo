@@ -1,6 +1,6 @@
 module Dora
   module Inputs
-    class TimeInput < SimpleForm::Inputs::StringInput
+    class DateTimeInput < SimpleForm::Inputs::StringInput
 
       include DojoPropsMethods
 
@@ -14,9 +14,13 @@ module Dora
       protected
 
       def dojo_type 
-        'dijit.form.TimeTextBox'
+        case input_type
+        when :date, :datetime
+          'dijit.form.DateTextBox'
+        when :time
+          'dijit.form.TimeTextBox'
+        end
       end
-
     end
   end
 end

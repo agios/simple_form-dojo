@@ -112,7 +112,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
-  # TIME ATTRIBUTE
+  # TIME INPUT
   context "with time attribute" do
     before(:each) do
       @html = with_form_for Project.new, :start_time
@@ -124,21 +124,30 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
+  # DATE INPUT
+  context "with date attribute" do
+    it "should generate a DateTextBox" do
+      @project = Factory(:project)
+      @html = with_form_for @project, :created_at
+      @html.should have_tag_selector('input#project_created_at')
+        .with_dojo_type('dijit.form.DateTextBox')
+    end
+  end
+
   # NUMERIC INPUT
   context "with numeric input" do
     context " and constraints " do
       before(:each) do
-        @html = with_form_for Project.new, :pay_rate, :dojo_html => {:constraints => {:min => 30, :max => 100}}
-        # @html = with_form_for Project.new, :pay_rate, :dojo_html => @dojo_props
+        @html = with_form_for Project.new, :importance, :dojo_html => {:constraints => {:min => 30, :max => 100}}
       end
 
       it "should generate a NumberTextBox" do
-        @html.should have_tag_selector('input#project_pay_rate')
+        @html.should have_tag_selector('input#project_importance')
           .with_dojo_type('dijit.form.NumberTextBox')
       end
 
       it "should generate a NumberTextBox with constraints" do
-        @html.should have_tag_selector('input#project_pay_rate')
+        @html.should have_tag_selector('input#project_importance')
           .with_dojo_props(:constraints => {:min => 30, :max => 100})
       end
     end
@@ -156,6 +165,27 @@ describe "Dora::FormBuilder", :type => :helper do
       end
     end
   end
+
+  # CURRENCY INPUT
+  context "with currency input" do
+    context "and constraints" do
+      before(:each) do
+        @project = Factory(:project)
+        @html = with_form_for @project, :pay_rate, :as => :currency, :dojo_html => { :constraints => { :min => 1.0, :max => 100.00, :fractional => true } }
+      end
+
+      it "should generate a CurrencyTextBox" do
+        @html.should have_tag_selector('input#project_pay_rate')
+          .with_dojo_type('dijit.form.CurrencyTextBox')
+      end
+
+      it "should generate a CurrencyTextBox with constraints" do
+        @html.should have_tag_selector('input#project_pay_rate')
+          .with_dojo_props(:constraints => { :min => 1.0, :max => 100.00, :fractional => true })
+      end
+    end
+  end
+
 
   # PASSWORDk
   context "with password input" do
