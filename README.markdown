@@ -14,36 +14,37 @@ I don't include the 1.6 dojo toolkit files in the git repository. So, to run the
 
 ## Dora::FormBuilder 
 
-* Documentation is TBD, but in general, it works the same way that simple_form works: 
+Documentation is TBD, but in general, it works the same way that simple_form works: 
 
-    <%= dora_form_for(@user, :html => { :id => 'userForm' } ) do |f| %>
-    <%= f.error_messages %>
-    <%= f.input :username %>
-    <%= f.input :name %>
-    <%= f.input :email %>
-    <%= f.input :pay_rate, :as => :currency, 
-                :dojo_html => { :promptMessage => 'Invalid Amount' 
-                                :currency => 'USD' }%>
-    <%= f.association :roles, :as => :check_boxes %>
-    <%= f.association :departments, :multiple => true %>
-    <%= f.input :created_at %>
-    <%= f.input :activated, :label => 'Active?', :as => :radio
-    <% end %>
+        <%= dora_form_for(@user, :html => { :id => 'userForm' } ) do |f| %>
+        <%= f.error_messages %>
+        <%= f.input :username %>
+        <%= f.input :name %>
+        <%= f.input :email %>
+        <%= f.input :pay_rate, :as => :currency, 
+                    :dojo_html => { :promptMessage => 'Invalid Amount' 
+                                    :currency => 'USD' }%>
+        <%= f.association :roles, :as => :check_boxes %>
+        <%= f.association :departments, :multiple => true %>
+        <%= f.input :created_at %>
+        <%= f.input :activated, :label => 'Active?', :as => :radio
+        <% end %>
 
-* Dijit currently included in Dora::FormBuilder
-** dijit.form.CurrencyTextBox
-** dijit.form.DateTextBox
-** dijit.form.NumberTextBox
-** dijit.form.SimpleTextArea
-** dijit.form.TextArea
-** dijit.form.TextBox
-** dijit.form.ValidationTextBox
-** dijit.form.MultiSelect (using option tags only - stores not implemented yet)
-** dijit.form.FilteringSelect (using options tags only - stores not implemented yet) 
-** dijit.form.Button
-** dijit.form.CheckBox
-** dijit.form.Form
-** dijit.form.RadioButton
+### Dijit objects currently included in Dora::FormBuilder
+
+* dijit.form.CurrencyTextBox
+* dijit.form.DateTextBox
+* dijit.form.NumberTextBox
+* dijit.form.SimpleTextArea
+* dijit.form.TextArea
+* dijit.form.TextBox
+* dijit.form.ValidationTextBox
+* dijit.form.MultiSelect (using option tags only - stores not implemented yet)
+* dijit.form.FilteringSelect (using options tags only - stores not implemented yet) 
+* dijit.form.Button
+* dijit.form.CheckBox
+* dijit.form.Form
+* dijit.form.RadioButton
 
 ## Dora::Helpers::TabsHelper 
 
