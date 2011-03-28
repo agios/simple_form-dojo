@@ -10,7 +10,8 @@ module Dora
     def get_and_merge_dojo_props!
       add_dojo_options_to_dojo_props 
       add_attributes_to_dojo_props
-      input_html_options[:'data-dojo-props'] = @builder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
+      # input_html_options[:'data-dojo-props'] = @builder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
+      input_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
     end
 
     private 

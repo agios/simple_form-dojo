@@ -32,13 +32,32 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should have a form with an id and a data-dojo-id" do
-      args = 
       data = helper.dora_form_for( Project.new, :html => { :id => 'my-test' } ) do |f|
         f.input :name
       end
       html = concat(data)
       html.should have_tag_selector('form#my-test')
         .with_attr('data-dojo-id', 'my-test')
+    end
+
+    it "should have a form with the proper action" do
+      data = helper.dora_form_for(Project.new, :html => { :id => 'my-test' }, :remote => true ) do |f|
+        f.input :name
+      end
+      html = concat(data)
+      html.should have_tag_selector('form#my-test')
+        .with_dojo_props(:action => '/projects')
+        .with_dojo_props(:'data-remote' => true)
+        .with_dojo_props(:'method' => 'post')
+    end
+
+    it "should have a form with a put method" do
+      data = helper.dora_form_for(Project.new, :method => 'put', :html => { :id => 'my-test' }, :remote => true ) do |f|
+        f.input :name
+      end
+      html = concat(data)
+      html.should have_tag_selector('form#my-test')
+        .with_dojo_props(:'method' => 'put')
     end
   end
 

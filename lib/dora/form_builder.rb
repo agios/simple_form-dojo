@@ -1,6 +1,9 @@
 module Dora
   class FormBuilder < SimpleForm::FormBuilder
     include Dora::Inputs
+    # need to include this in order to 
+    # get the html_escape method
+    include ERB::Util
 
     attr_accessor :dojo_props
 
@@ -65,8 +68,8 @@ module Dora
         attribute, collection, value_method, text_method, options, html_options
       ) do |value, text, default_html_options|
         # add in the dojo_props[:value]
-        @dojo_props[:value] = value.to_s
-        default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        @dojo_props[:value] = html_escape(value.to_s)
+        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
         radio = radio_button(attribute, value, default_html_options)
         collection_label(attribute, value, radio, text, :class => 'collection_radio')
       end
@@ -79,8 +82,8 @@ module Dora
       ) do |value, text, default_html_options|
         default_html_options[:multiple] = true
         # add in the dojo_props[:value]
-        @dojo_props[:value] = value.to_s
-        default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        @dojo_props[:value] = html_escape(value.to_s)
+        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
         check_box = check_box(attribute, default_html_options, value, '')
         collection_label(attribute, value, check_box, text, :class => 'collection_check_boxes')
       end
@@ -93,7 +96,7 @@ module Dora
     # then removes the surrounding brackets ({...}) from the result 
     # All of this is required in order to place this into a 
     # string format compatible with data-dojo-props parsing
-    def encode_as_dojo_props(options)
+    def self.encode_as_dojo_props(options)
       ActiveSupport::JSON.encode(options)
         .to_s
         .tr('"',"'")
