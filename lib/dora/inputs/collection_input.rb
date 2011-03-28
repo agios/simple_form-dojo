@@ -26,6 +26,8 @@ module Dora
           'dijit.form.CheckBox'
         when :radio
           'dijit.form.RadioButton'
+        when :select
+          (input_html_options.has_key?(:multiple) ? 'dijit.form.MultiSelect' : 'dijit.form.FilteringSelect')
         end
       end
 

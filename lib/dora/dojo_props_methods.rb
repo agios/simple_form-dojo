@@ -13,20 +13,6 @@ module Dora
       input_html_options[:'data-dojo-props'] = @builder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
     end
 
-    ## 
-    # JSON encodes the props hash, 
-    # then translates double-quotes to single-quotes, 
-    # then translates double-backslashes to single-backslashes for regex issues, 
-    # then removes the surrounding brackets ({...}) from the result 
-    # All required to put this into a string format compatible with data-dojo-* parsing
-    def self.encode_dojo_props(options)
-      ActiveSupport::JSON.encode(options)
-        .to_s
-        .tr('"',"'")
-        .sub(/\\\\/, '\\')
-        .slice(1..-2)
-    end
-
     private 
 
     ##

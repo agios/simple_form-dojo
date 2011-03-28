@@ -6,9 +6,14 @@ Factory.sequence :task_name do |n|
   "Task #{n}"
 end
 
+Factory.sequence :dept_name do |n|
+  "Department #{n}"
+end
+
 Factory.define :project do |proj|
   proj.name       { Factory.next(:name) } 
   proj.summary    "Lorem ipsum..."
+  proj.association  :department
   proj.start_time Time.now
   proj.pay_rate   7.50
   proj.importance 5
@@ -20,6 +25,10 @@ Factory.define :task do |task|
   task.name       { Factory.next(:task_name) }
   task.priority   3
   task.complete   false
+end
+
+Factory.define :department do |dept|
+  dept.name { Factory.next(:dept_name) }
 end
 
 Factory.define :project_with_task, :parent => :project do |proj|

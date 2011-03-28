@@ -5,7 +5,7 @@ module Dora
     attr_accessor :dojo_props
 
     map_type :time,                                 :to => Dora::Inputs::TimeInput
-    map_type :radio, :check_boxes,                  :to => Dora::Inputs::CollectionInput
+    map_type :select, :radio, :check_boxes,         :to => Dora::Inputs::CollectionInput
     map_type :integer, :decimal, :float,            :to => Dora::Inputs::NumericInput
     map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput
     map_type :string, :email, :search, :tel, :url,  :to => Dora::Inputs::StringInput
@@ -64,7 +64,7 @@ module Dora
         attribute, collection, value_method, text_method, options, html_options
       ) do |value, text, default_html_options|
         # add in the dojo_props[:value]
-        @dojo_props[:value] = value
+        @dojo_props[:value] = value.to_s
         default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
         radio = radio_button(attribute, value, default_html_options)
         collection_label(attribute, value, radio, text, :class => 'collection_radio')
@@ -78,7 +78,7 @@ module Dora
       ) do |value, text, default_html_options|
         default_html_options[:multiple] = true
         # add in the dojo_props[:value]
-        @dojo_props[:value] = value
+        @dojo_props[:value] = value.to_s
         default_html_options[:'data-dojo-props'] = encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
         check_box = check_box(attribute, default_html_options, value, '')
         collection_label(attribute, value, check_box, text, :class => 'collection_check_boxes')
