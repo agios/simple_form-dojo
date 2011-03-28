@@ -88,6 +88,7 @@ module Dora
         opts = input_html_options
         @dojo_props[:value] = opts.fetch("value") { value_before_type_cast(object, attribute_name) } unless input_type == "file"
         @dojo_props[:value] &&= html_escape(@dojo_props[:value])
+        @dojo_props.delete(:value) if @dojo_props[:value].nil?
       end
     end
 
