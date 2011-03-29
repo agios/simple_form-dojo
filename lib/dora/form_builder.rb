@@ -100,8 +100,9 @@ module Dora
       ActiveSupport::JSON.encode(options)
         .to_s
         .tr('"',"'")
-        .sub(/\\\\/, '\\')
         .slice(1..-2)
+        # .gsub(/\\\\/, '\\')
+        # .slice(1..-2)
     end
 
   end

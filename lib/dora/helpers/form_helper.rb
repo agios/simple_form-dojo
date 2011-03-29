@@ -22,6 +22,7 @@ module Dora
         end
         dojo_props = ( opts[:dojo_html] ||= {} )
         dojo_props[:action] ||= url_for(opts[:url] || {})
+        
         dojo_props[:'data-remote'] = true if opts.include?(:remote) && opts[:remote]
         dojo_props[:'accept-charset'] = 'UTF-8'
         dojo_props[:'method'] = opts[:method] ||= 'post' 

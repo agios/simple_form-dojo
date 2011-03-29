@@ -8,11 +8,13 @@ describe "Dora::FormBuilder", :type => :helper do
     # helper.stub(:projects_path).and_return("")
     # helper.stub(:protect_against_forgery?).and_return(false)
     # # let(:project) { Project.new }
+
+    @regex = '\d{5}'
     
     @dojo_props = {
       :promptMessage => 'This value is required', 
       :invalidMessage => 'Missing value', 
-      :regExp => '\d{5}',
+      :regExp => @regex, 
       :tooltipPosition => 'right' 
     }
   end
@@ -40,7 +42,7 @@ describe "Dora::FormBuilder", :type => :helper do
         .with_attr('data-dojo-id', 'my-test')
     end
 
-    it "should have a form with the proper action" do
+    it "should have a form with the proper action", :focus => true do
       data = helper.dora_form_for(Project.new, :html => { :id => 'my-test' }, :remote => true ) do |f|
         f.input :name
       end
@@ -97,25 +99,11 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should generate a ValidationTextBox with a regExp property" do
-      it_should_have_dojo_props(:regExp => @dojo_props[:regExp])
+      it_should_have_dojo_props(:regExp => '\\\d{5}')
     end
 
     it "should generate a ValidationTextBox with a tooltip property" do
       it_should_have_dojo_props(:tooltipPosition => @dojo_props[:tooltipPosition])
-    end
-  end
-
-  # REGEXP
-  context "with complex regular expression" do
-    before(:each) do 
-      @email_regex = '\A[\w!#$%&\'*+/=?`{|}~^-]+(?:\.[\w!#$%&\'*+/=?`{|}~^-]+)*@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\Z'
-      @html = with_form_for Project.new, :name, :dojo_html => { :regExp => @email_regex }
-    end
-
-    it "should generate a ValidationTextBox and handle a complicated regExp prop" do
-      pending
-      @html.should have_tag_selector('input#project_name')
-        .with_dojo_props(:regExp => @email_regex)
     end
   end
 
@@ -206,7 +194,7 @@ describe "Dora::FormBuilder", :type => :helper do
   end
 
 
-  # PASSWORDk
+  # PASSWORD
   context "with password input" do
     before(:each) do
       @html = with_form_for Project.new, :password
@@ -216,6 +204,36 @@ describe "Dora::FormBuilder", :type => :helper do
       @html.should have_tag_selector('input#project_password')
         .with_dojo_type('dijit.form.TextBox')
         .with_attr('type', 'password')
+    end
+  end
+
+  # EMAIL
+  context "with email input" do
+    before(:each) do
+      @html = with_form_for Project.new, :email
+    end
+
+    it "should generate a TextBox with email regexp and message", :focus => true do
+      @emailRe = '^[\\\w!#%$*+=?`{|}~^-]+(?:[\\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\\.)+[a-zA-Z]{2,6}$'
+      @html.should have_tag_selector('input#project_email')
+        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_props(:invalidMessage => 'Invalid email format.')
+        .with_dojo_props(:regExp => @emailRe)
+    end
+  end
+
+
+  # PHONE
+  context "with phone input" do
+    before(:each) do
+      @html = with_form_for Project.new, :phone
+    end
+    it "should generate a TextBox with phone regexp and message" do
+      @phoneRe = '^[\\\d(.)+\\\s-]+$'
+      @html.should have_tag_selector('input#project_phone')
+        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_props(:invalidMessage => 'Invalid phone format.')
+        .with_dojo_props(:regExp => @phoneRe)
     end
   end
 
@@ -355,4 +373,5 @@ describe "Dora::FormBuilder", :type => :helper do
         .with_dojo_props(:type => 'text')
     end
   end
+
 end

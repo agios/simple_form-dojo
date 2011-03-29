@@ -10,10 +10,16 @@ Factory.sequence :dept_name do |n|
   "Department #{n}"
 end
 
+Factory.sequence :email do |n|
+  "email#{n}@example.com"
+end
+
 Factory.define :project do |proj|
   proj.name       { Factory.next(:name) } 
   proj.summary    "Lorem ipsum..."
   proj.association  :department
+  proj.email      { Factory.next(:email) } 
+  proj.phone      '555.555.5555'
   proj.start_time Time.now
   proj.pay_rate   7.50
   proj.importance 5

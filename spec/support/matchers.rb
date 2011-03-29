@@ -21,7 +21,8 @@ module Dora
 
         # Expects a hash in props
         def with_dojo_props(props)
-          @dojo_props = props.symbolize_keys
+          @dojo_props ||= {}
+          @dojo_props.merge!(props.symbolize_keys)
           self
         end
 
@@ -30,7 +31,8 @@ module Dora
         # method looks to ensure that the properties 
         # do not exist within data-dojo-props
         def without_dojo_props(props)
-          @dojo_props_without = props.symbolize_keys
+          @dojo_props_without ||= {}
+          @dojo_props_without.merge!(props.symbolize_keys)
           self
         end
 
