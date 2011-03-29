@@ -4,9 +4,8 @@ module Dora
       
       def dora_form_for(record_or_name_or_array, *args, &block)
 
-        options = args.extract_options!.reverse_merge(:builder => Dora::FormBuilder,
-                                                      :html => { :class => 'dora' })
-
+        options = args.extract_options!.reverse_merge(:builder => Dora::FormBuilder)
+        options[:html] ||= {}
         options[:html][:'data-dojo-id'] ||= options[:html][:id] if options[:html][:id]
         options[:html][:'data-dojo-type'] ||= 'dijit.form.Form'
         # duplicate options in order to apply form_for_options
@@ -22,8 +21,13 @@ module Dora
         end
         dojo_props = ( opts[:dojo_html] ||= {} )
         dojo_props[:action] ||= url_for(opts[:url] || {})
-        
+        dojo_props[:class] ||= 'dora'
         dojo_props[:'data-remote'] = true if opts.include?(:remote) && opts[:remote]
+        if opts.include?(:remote) && opts[:remote]
+          dojo_props[:'data-remote'] = true
+          dojo_props[:class] << " data-remote"
+        end
+
         dojo_props[:'accept-charset'] = 'UTF-8'
         dojo_props[:'method'] = opts[:method] ||= 'post' 
         # add dojo-props

@@ -32,8 +32,10 @@ module Dora
     # the value based on the current object
     def button(type, *args, &block)
       # set options to value if first arg is a Hash
-      options = args.extract_options!.reverse_merge(:'data-dojo-type' => 'dijit.form.Button', 
-                                                    :'data-dojo-props' => "type:'#{type}'")
+      options = args.extract_options!.reverse_merge(:'data-dojo-type' => 'dijit.form.Button') 
+      dojo_props = { :type => type }
+      dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
+      options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(dojo_props)
       options[:class] = "button #{options[:class]}".strip
       content = ''
       if value = options.delete('value')

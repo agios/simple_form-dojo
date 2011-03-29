@@ -24,12 +24,12 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should have a form element with a dora_form class" do
       @html = with_form_for Project.new, :name
-      @html.should have_tag_selector('form.dora')
+      @html.should have_tag_selector('form')
     end
 
     it "should have a form element with the dijit Form type" do
       @html = with_form_for Project.new, :name
-      @html.should have_tag_selector('form#new_project.dora')
+      @html.should have_tag_selector('form#new_project')
         .with_dojo_type('dijit.form.Form')
     end
 
@@ -320,7 +320,7 @@ describe "Dora::FormBuilder", :type => :helper do
   # BUTTONS
   context "button" do
     it "should create a button element" do
-      @html = with_button_for Project.new, :submit
+      @html = with_button_for Project.new, :submit, :dojo_html => {:'data-disable-with' => 'Saving...'}
       @html.should have_tag_selector("form button.button")
         .with_dojo_type('dijit.form.Button')
         .with_dojo_props(:type => 'submit')
