@@ -28,11 +28,19 @@ module Dora
     #   f.button :submit, :value => 'Save Me'
     # end
     #
+    # To use dojox.form.BusyButton, pass :busy => true
+    # dora-for_for @uswer do |f|
+    #   f.button :submit, :busy => true, :value => 'Save Me'
+    # end
+    #
     # If :value doesn't exist, tries to determine the 
     # the value based on the current object
     def button(type, *args, &block)
       # set options to value if first arg is a Hash
-      options = args.extract_options!.reverse_merge(:'data-dojo-type' => 'dijit.form.Button') 
+      options = args.extract_options!
+      button_type = 'dijit.form.Button'
+      button_type = 'dojox.form.BusyButton' if options[:busy]
+      options.reverse_merge!(:'data-dojo-type' => button_type) 
       dojo_props = { :type => type }
       dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
       options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(dojo_props)

@@ -42,7 +42,7 @@ describe "Dora::FormBuilder", :type => :helper do
         .with_attr('data-dojo-id', 'my-test')
     end
 
-    it "should have a form with the proper action", :focus => true do
+    it "should have a form with the proper action" do
       data = helper.dora_form_for(Project.new, :html => { :id => 'my-test' }, :remote => true ) do |f|
         f.input :name
       end
