@@ -1,5 +1,10 @@
+require 'set'
+
 module Dora
   module DojoPropsMethods
+
+    FALSE_VALUES = [false, 0, '0', 'f', 'F', 'false', 'FALSE'].to_set
+    TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE'].to_set
 
     # need to include this in order to 
     # get the html_escape method
@@ -88,6 +93,10 @@ module Dora
       unless [:text, :text_simple].include?(input_type) 
         opts = input_html_options
         @dojo_props[:value] = opts.fetch("value") { value_before_type_cast(object, attribute_name) } unless input_type == "file"
+        char_subs = {
+          "'" => ""
+        }
+        # @dojo_props[:value] &&= html_escape(@dojo_props[:value]).gsub(/\'/, char_subs )
         @dojo_props[:value] &&= html_escape(@dojo_props[:value])
         @dojo_props.delete(:value) if @dojo_props[:value].nil?
       end
@@ -95,20 +104,19 @@ module Dora
 
     def value_before_type_cast(object, object_name)
       unless object.nil?
-        if self.is_a? Dora::Inputs::CollectionInput
-          type = column.try(:type)
-          case type
-          when :boolean
-            object.send(attribute_name.to_s)
-          else
-            # detect_collection_methods comes from SimpleForm::Inputs::CollectionInput
-            label_method, value_method = detect_collection_methods
-            object.send(value_method)
-          end
+        value = object.respond_to?(attribute_name.to_s + "_before_type_cast") ? 
+                  object.send(attribute_name.to_s + "_before_type_cast") :
+                  object.send(attribute_name.to_s)
+        type = column.try(:type)
+        case type
+        when :boolean
+          return (value.is_a?(String) && value.blank? ? nil : TRUE_VALUES.include?(value))
         else
-          object.respond_to?(attribute_name.to_s + "_before_type_cast") ? 
-            object.send(attribute_name.to_s + "_before_type_cast") :
-            object.send(attribute_name.to_s)
+          if self.is_a? Dora::Inputs::CollectionInput
+            return value
+          else
+            return value
+          end
         end
       end
     end

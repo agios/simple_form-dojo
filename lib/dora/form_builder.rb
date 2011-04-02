@@ -77,9 +77,18 @@ module Dora
       render_collection(
         attribute, collection, value_method, text_method, options, html_options
       ) do |value, text, default_html_options|
+
+        local_dojo_props = @dojo_props.dup
+
+        # Checked?
+        if values_are_equal?(local_dojo_props[:value], value)
+          local_dojo_props[:checked] = "checked"
+          default_html_options[:checked] = "checked"
+        end
+
         # add in the dojo_props[:value]
-        @dojo_props[:value] = html_escape(value.to_s)
-        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        local_dojo_props[:value] = html_escape(value.to_s)
+        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
         radio = radio_button(attribute, value, default_html_options)
         collection_label(attribute, value, radio, text, :class => 'collection_radio')
       end
@@ -90,10 +99,22 @@ module Dora
       render_collection(
         attribute, collection, value_method, text_method, options, html_options
       ) do |value, text, default_html_options|
+        local_dojo_props = @dojo_props.dup
+
+        # Checked?
+        if values_are_equal?(local_dojo_props[:value], value)
+          local_dojo_props[:checked] = "checked"
+          default_html_options[:checked] = "checked"
+        end
+        # if local_dojo_props[:value].to_s == value.to_s
+        #   pugs "YAY!!!!!!!!!!!!!!!!!!"
+        #   local_dojo_props[:checked] = "checked"
+        #   default_html_options[:checked] = "checked"
+        # end
         default_html_options[:multiple] = true
         # add in the dojo_props[:value]
-        @dojo_props[:value] = html_escape(value.to_s)
-        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.nil?
+        local_dojo_props[:value] = html_escape(value.to_s)
+        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
         check_box = check_box(attribute, default_html_options, value, '')
         collection_label(attribute, value, check_box, text, :class => 'collection_check_boxes')
       end
@@ -109,10 +130,23 @@ module Dora
     def self.encode_as_dojo_props(options)
       ActiveSupport::JSON.encode(options)
         .to_s
-        .tr('"',"'")
         .slice(1..-2)
+        # .tr('"',"'")
         # .gsub(/\\\\/, '\\')
         # .slice(1..-2)
+    end
+
+    private
+
+    def values_are_equal?(obj_value, item_value)
+      value = obj_value
+      if value.is_a?(String)
+        values = obj_value[/\[([,0-9\s]+)\]/,1]
+        unless values.nil?
+          return values.tr(' ','').split(',').include?(item_value.to_s)
+        end
+      end
+      (value.to_s == item_value.to_s ? true : false)
     end
 
   end
