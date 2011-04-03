@@ -41,16 +41,16 @@ module Dora
       button_type = 'dijit.form.Button'
       button_type = 'dojox.form.BusyButton' if options[:busy]
       options.reverse_merge!(:'data-dojo-type' => button_type) 
-      dojo_props = { :type => type }
-      dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
-      options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(dojo_props)
-      options[:class] = "button #{options[:class]}".strip
       content = ''
-      if value = options.delete('value')
+      if value = options.delete(:value)
         content = value.html_safe
       else
         content = button_default_value
       end
+      dojo_props = { :type => type, :value => content }
+      dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
+      options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(dojo_props)
+      options[:class] = "button #{options[:class]}".strip
       template.content_tag(:button, content, *(args << options), &block)
     end
    
