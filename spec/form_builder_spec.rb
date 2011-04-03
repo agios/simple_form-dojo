@@ -99,7 +99,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should generate a ValidationTextBox with a regExp property" do
-      it_should_have_dojo_props(:regExp => '\\\d{5}')
+      it_should_have_dojo_props(:regExp => '\\d{5}')
     end
 
     it "should generate a ValidationTextBox with a tooltip property" do
@@ -214,7 +214,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should generate a TextBox with email regexp and message", :focus => true do
-      @emailRe = '^[\\\w!#%$*+=?`{|}~^-]+(?:[\\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\\.)+[a-zA-Z]{2,6}$'
+      @emailRe = '^[\\w!#%$*+=?`{|}~^-]+(?:[\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$'
       @html.should have_tag_selector('input#project_email')
         .with_dojo_type('dijit.form.ValidationTextBox')
         .with_dojo_props(:invalidMessage => 'Invalid email format.')
@@ -229,7 +229,7 @@ describe "Dora::FormBuilder", :type => :helper do
       @html = with_form_for Project.new, :phone
     end
     it "should generate a TextBox with phone regexp and message" do
-      @phoneRe = '^[\\\d(.)+\\\s-]+$'
+      @phoneRe = '^[\\d(.)+\\s-]+$'
       @html.should have_tag_selector('input#project_phone')
         .with_dojo_type('dijit.form.ValidationTextBox')
         .with_dojo_props(:invalidMessage => 'Invalid phone format.')
