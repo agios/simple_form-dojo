@@ -1,8 +1,8 @@
 require 'action_view'
 require 'simple_form'
-require_relative 'dora/version'
-require_relative 'dora/helpers/tabs_helper'
-require_relative 'dora/helpers/form_helper'
+require 'dora/version'
+require 'dora/helpers/tabs_helper'
+require 'dora/helpers/form_helper'
 
 module Dora
   autoload :FormBuilder,        'dora/form_builder'
