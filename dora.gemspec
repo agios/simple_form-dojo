@@ -11,10 +11,10 @@ Gem::Specification.new do |s|
   s.email       = ["yawpcast@gmail.com"] 
   s.homepage    = ["http://www.patrickward.com"]
   s.summary     = "Dojo Toolkit helpers for Rails 3" 
-  s.description = "Dora helps you sing with Dojo and Rails. In more practical terms, she helps you create Dojo Toolkit markup in a Rails 3 environment."
+  s.description = "Dora is a collection of helpers for use with Dojo and Rails. The goal of the project is to make it simple to create Dijit elements using the existing Rails helper infrastructure."
   s.rubyforge_project = "dora"
 
-  s.files       = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files       = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.markdown"]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
