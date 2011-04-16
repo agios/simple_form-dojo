@@ -13,7 +13,7 @@ module Dora
         opts = options.dup
         case record_or_name_or_array
         when Array
-          object = record_or_name_or_array.last
+          # object = record_or_name_or_array.last
           apply_form_for_options!(record_or_name_or_array, opts)
         else
           object = record_or_name_or_array
