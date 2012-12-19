@@ -9,3 +9,4 @@ spec/dummy/public/javascripts/dojo*
 *.log
 *~
 .DS_Store
+.rvmrc
