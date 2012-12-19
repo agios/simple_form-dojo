@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Patrick Ward"]
   s.email       = ["yawpcast@gmail.com"] 
-  s.homepage    = ["http://www.patrickward.com"]
+  s.homepage    = "http://www.patrickward.com"
   s.summary     = "Dojo Toolkit helpers for Rails 3" 
   s.description = "Dora is a collection of helpers for use with Dojo and Rails. The goal of the project is to make it simple to create Dijit elements using the existing Rails helper infrastructure."
   s.rubyforge_project = "dora"
