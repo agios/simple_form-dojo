@@ -15,7 +15,7 @@ module Dora
       protected
 
       def dojo_type 
-        'dijit.form.NumberTextBox'
+        'dijit/form/NumberTextBox'
       end
 
       def integer?

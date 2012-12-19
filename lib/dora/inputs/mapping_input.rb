@@ -20,14 +20,14 @@ module Dora
         case input_type
         when :password
           if has_required?
-            'dijit.form.ValidationTextBox'
+            'dijit/form/ValidationTextBox'
           else
-            'dijit.form.TextBox'
+            'dijit/form/TextBox'
           end
         when :text
-          'dijit.form.TextArea'
+          'dijit/form/Textarea'
         when :text_simple
-          'dijit.form.SimpleTextArea'
+          'dijit/form/SimpleTextarea'
         when :file
           raise('File fields have not been implemented yet!')
         end

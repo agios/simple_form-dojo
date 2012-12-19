@@ -23,11 +23,11 @@ module Dora
       def dojo_type 
         case input_type
         when :check_boxes
-          'dijit.form.CheckBox'
+          'dijit/form/CheckBox'
         when :radio
-          'dijit.form.RadioButton'
+          'dijit/form/RadioButton'
         when :select
-          (input_html_options.has_key?(:multiple) ? 'dijit.form.MultiSelect' : 'dijit.form.FilteringSelect')
+          (input_html_options.has_key?(:multiple) ? 'dijit/form/MultiSelect' : 'dijit/form/FilteringSelect')
         end
       end
 

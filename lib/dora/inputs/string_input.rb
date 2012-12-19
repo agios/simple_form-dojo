@@ -15,9 +15,9 @@ module Dora
 
       def dojo_type 
         if has_required? || [:tel, :email].include?(input_type)
-          'dijit.form.ValidationTextBox'
+          'dijit/form/ValidationTextBox'
         else
-          'dijit.form.TextBox'
+          'dijit/form/TextBox'
         end
       end
 

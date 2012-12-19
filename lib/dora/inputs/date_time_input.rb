@@ -16,9 +16,9 @@ module Dora
       def dojo_type 
         case input_type
         when :date, :datetime
-          'dijit.form.DateTextBox'
+          'dijit/form/DateTextBox'
         when :time
-          'dijit.form.TimeTextBox'
+          'dijit/form/TimeTextBox'
         end
       end
     end

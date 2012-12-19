@@ -7,7 +7,7 @@ module Dora
         options = args.extract_options!.reverse_merge(:builder => Dora::FormBuilder)
         options[:html] ||= {}
         options[:html][:'data-dojo-id'] ||= options[:html][:id] if options[:html][:id]
-        options[:html][:'data-dojo-type'] ||= 'dijit.form.Form'
+        options[:html][:'data-dojo-type'] ||= 'dijit/form/Form'
         # duplicate options in order to apply form_for_options
         # and capture the correct url
         opts = options.dup
