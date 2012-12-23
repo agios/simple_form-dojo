@@ -4,7 +4,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
   context "with type=text" do
     before(:each) do
-      @project = Factory(:project)
+      @project = build(:project)
     end
 
     it "should have the correct value for a string textbox" do
@@ -32,19 +32,19 @@ describe "Dora::FormBuilder", :type => :helper do
     end
   end
 
-  context "with TextArea" do
+  context "with Textarea" do
     before(:each) do
-      @project = Factory(:project)
+      @project = build(:project)
     end
 
-    it "should have a SimpleTextArea with a value in the right place" do
+    it "should have a SimpleTextarea with a value in the right place" do
       @html = with_form_for @project, :description, :as => :text_simple
       @html.should have_tag_selector('textarea#project_description')
-        .with_dojo_type('dijit.form.SimpleTextArea')
+        .with_dojo_type('dijit/form/SimpleTextarea')
         .with_content(@project.description)
     end
 
-    it "should not have a value='' in data-dojo-props for a SimpleTextAreas" do
+    it "should not have a value='' in data-dojo-props for a SimpleTextareas" do
       @html = with_form_for @project, :description, :as => :text_simple
       @html.should have_tag_selector('textarea#project_description')
         .without_dojo_props(:value => @project.description)
@@ -53,11 +53,11 @@ describe "Dora::FormBuilder", :type => :helper do
 
   context "with boolean attribute" do
     before(:each) do
-      @task = Factory(:task)
+      @task = build(:task)
     end
 
     it "should have a boolean radio set with the correct value" do
-      @html = with_form_for @task, :complete, :as => :radio
+      @html = with_form_for @task, :complete, :as => :radio_buttons
       @html.should have_tag_selector("input#task_complete_true")
         .with_dojo_props(:value => 'true')
       @html.should have_tag_selector("input#task_complete_false")
@@ -67,8 +67,8 @@ describe "Dora::FormBuilder", :type => :helper do
 
   context "with associations" do
     before(:each) do
-      @project = Factory(:project) 
-      @task = Factory(:task)
+      @project = create(:project) 
+      @task = create(:task)
       Task.stub(:all).and_return([@task])
     end
 
@@ -79,7 +79,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should have a Radio button with the correct value" do
-      @html = with_association_for @project, :tasks, :as => :radio
+      @html = with_association_for @project, :tasks, :as => :radio_buttons
       @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
         .with_dojo_props(:value => @task.id.to_s)
     end

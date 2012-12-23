@@ -1,7 +1,9 @@
+require 'action_view'
+
 module Dora
   # = Dora Dojo Tabs Helper
   module Helpers
-    # Provides methods to generate HTML markup for dijit.layout.TabContainer objects 
+    # Provides methods to generate HTML markup for dijit/layout/TabContainer objects 
     #
     # == 
     module TabsHelper
@@ -22,8 +24,8 @@ module Dora
       #       #... tab contents
       #     <% end %>
       #   <% end %>
-      #   # => <div data-dojo-props="doLayout:false" data-dojo-type="dijit.layout.TabContainer" id="tabs">
-      #   # =>     <div data-dojo-props="title:'Tab Title One'" data-dojo-type="dijit.layout.ContentPane">
+      #   # => <div data-dojo-props="doLayout:false" data-dojo-type="dijit/layout/TabContainer" id="tabs">
+      #   # =>     <div data-dojo-props="title:'Tab Title One'" data-dojo-type="dijit/layout/ContentPane">
       #   # =>         ... tab contents
       #   # =>     </div>
       #   # => </div>
@@ -33,6 +35,7 @@ module Dora
       end   
 
       class TabsRenderer
+        include ActionView::Helpers::CaptureHelper
         def initialize( options={}, &block )
           raise ArgumentError, "Missing block" unless block_given?
           @template = eval( 'self', block.binding )
@@ -42,7 +45,7 @@ module Dora
         end
 
         def create(title, options={}, &block)
-          raise "Block needed for TabsRenderer#CREATE" unless block_given?
+          raise ArgumentError, "Block needed for TabsRenderer#CREATE" unless block_given?
           @tabs << [ title, options, block ]
           # had to return an empty string. Otherwise, the @tabs object was being 
           # returned when used with the <%= tab.create('title') %> syntax
@@ -52,15 +55,15 @@ module Dora
         def render
           content_tag( :div, raw([render_tabs].join), { :id => :tabs, 
                                                         "data-dojo-props" => "doLayout:false", 
-                                                        "data-dojo-type" => "dijit.layout.TabContainer" 
+                                                        "data-dojo-type" => "dijit/layout/TabContainer" 
                                                       }.merge(@options) )
         end
 
         private
      
         def render_tabs
-          @tabs.collect do |tab| 
-            content_tag(:div, capture( &tab[2] ), tab[1].merge( "data-dojo-type" => "dijit.layout.ContentPane", 
+          @tabs.collect do |tab|
+            content_tag(:div, capture( &tab[2] ), tab[1].merge( "data-dojo-type" => "dijit/layout/ContentPane", 
                                                                 "data-dojo-props" => "title:'#{tab[0]}'"))
           end.join.to_s
         end

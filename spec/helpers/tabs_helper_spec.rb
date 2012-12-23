@@ -19,11 +19,11 @@ describe "Dora::Helpers::TabsHelper Test", :type => :helper do
     it "should create the correct DOM structure" do
       render :text => @tabs
       assert_select "div[id='tabs']", 1
-      assert_select "div[data-dojo-type='dijit.layout.TabContainer']", 1
+      assert_select "div[data-dojo-type='dijit/layout/TabContainer']", 1
       assert_select "div[data-dojo-props='doLayout:false']", 1
-      assert_select "div[id='tabs'] div[data-dojo-type='dijit.layout.ContentPane']", 2
-      assert_select "div[id='tabs'] div[data-dojo-props='title:\'One\'']", 1
-      assert_select "div[id='tabs'] div[data-dojo-props='title:\'Two\'']", 1
+      assert_select "div[id='tabs'] div[data-dojo-type='dijit/layout/ContentPane']", 2
+      assert_select "div[id='tabs'] div[data-dojo-props='title:&#x27;One&#x27;']", 1
+      assert_select "div[id='tabs'] div[data-dojo-props='title:&#x27;Two&#x27;']", 1
     end 
   end
  

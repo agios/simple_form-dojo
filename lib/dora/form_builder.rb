@@ -9,10 +9,12 @@ module Dora
 
     map_type :currency,                             :to => Dora::Inputs::CurrencyInput
     map_type :date, :time, :datetime,               :to => Dora::Inputs::DateTimeInput
-    map_type :select, :radio, :check_boxes,         :to => Dora::Inputs::CollectionInput
+    map_type :select, :radio_buttons, :check_boxes, :to => Dora::Inputs::CollectionInput
     map_type :integer, :decimal, :float,            :to => Dora::Inputs::NumericInput
-    map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput
+    #map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput
     map_type :string, :email, :search, :tel, :url,  :to => Dora::Inputs::StringInput
+    map_type :text, :text_simple,                   :to => Dora::Inputs::TextInput
+    map_type :password,                             :to => Dora::Inputs::PasswordInput
 
     # Simple override of initializer in order to add in the dojo_props attribute
     def initialize(object_name, object, template, options, proc)
@@ -72,52 +74,60 @@ module Dora
       I18n.t(defaults.shift, :default => defaults)
     end
 
-    def dojo_collection_radio(attribute, collection, value_method, 
+    def dojo_collection_radio_buttons(attribute, collection, value_method, 
                               text_method, options={}, html_options={})
-      render_collection(
-        attribute, collection, value_method, text_method, options, html_options
-      ) do |value, text, default_html_options|
-
+      rendered_collection = render_collection(
+        collection, value_method, text_method, options, html_options
+      ) do |item, value, text, default_html_options|
         local_dojo_props = @dojo_props.dup
 
-        # Checked?
-        if values_are_equal?(local_dojo_props[:value], value)
-          local_dojo_props[:checked] = "checked"
-          default_html_options[:checked] = "checked"
-        end
+        ## Checked?
+        #if values_are_equal?(local_dojo_props[:value], value)
+          #local_dojo_props[:checked] = "checked"
+          #default_html_options[:checked] = "checked"
+        #end
 
         # add in the dojo_props[:value]
         local_dojo_props[:value] = html_escape(value.to_s)
         default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
-        radio = radio_button(attribute, value, default_html_options)
-        collection_label(attribute, value, radio, text, :class => 'collection_radio')
+        
+        builder = instantiate_builder(SimpleForm::ActionViewExtensions::RadioButtonBuilder, attribute, item, value, text, default_html_options)
+        
+        if block_given?
+          yield builder
+        else
+          builder.radio_button + builder.label(:class => "collection_radio_buttons")
+        end
       end
+      wrap_rendered_collection(rendered_collection, options)
     end
 
     def dojo_collection_check_boxes(attribute, collection, value_method, 
                                     text_method, options={}, html_options={})
-      render_collection(
-        attribute, collection, value_method, text_method, options, html_options
-      ) do |value, text, default_html_options|
+      rendered_collection = render_collection(
+        collection, value_method, text_method, options, html_options
+      ) do |item, value, text, default_html_options|
         local_dojo_props = @dojo_props.dup
 
-        # Checked?
-        if values_are_equal?(local_dojo_props[:value], value)
-          local_dojo_props[:checked] = "checked"
-          default_html_options[:checked] = "checked"
-        end
-        # if local_dojo_props[:value].to_s == value.to_s
-        #   pugs "YAY!!!!!!!!!!!!!!!!!!"
-        #   local_dojo_props[:checked] = "checked"
-        #   default_html_options[:checked] = "checked"
-        # end
+        ## Checked
+        #if values_are_equal?(local_dojo_props[:value], value)
+          #local_dojo_props[:checked] = "checked"
+          #default_html_options[:checked] = "checked"
+        #end
         default_html_options[:multiple] = true
         # add in the dojo_props[:value]
         local_dojo_props[:value] = html_escape(value.to_s)
-        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
-        check_box = check_box(attribute, default_html_options, value, '')
-        collection_label(attribute, value, check_box, text, :class => 'collection_check_boxes')
+        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props)
+        
+        builder = instantiate_builder(SimpleForm::ActionViewExtensions::CheckBoxBuilder, attribute, item, value, text, default_html_options)
+        
+        if block_given?
+          yield builder
+        else
+          builder.check_box + builder.label(:class => "collection_check_boxes")
+        end
       end
+      wrap_rendered_collection(rendered_collection, options)
     end
 
     ## 

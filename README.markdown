@@ -32,19 +32,19 @@ Documentation is TBD, but in general, it works the same way that simple_form wor
 
 ### Dijit objects currently included in Dora::FormBuilder
 
-* dijit.form.CurrencyTextBox
-* dijit.form.DateTextBox
-* dijit.form.NumberTextBox
-* dijit.form.SimpleTextArea
-* dijit.form.TextArea
-* dijit.form.TextBox
-* dijit.form.ValidationTextBox
-* dijit.form.MultiSelect (using option tags only - stores not implemented yet)
-* dijit.form.FilteringSelect (using options tags only - stores not implemented yet) 
-* dijit.form.Button
-* dijit.form.CheckBox
-* dijit.form.Form
-* dijit.form.RadioButton
+* dijit/form/CurrencyTextBox
+* dijit/form/DateTextBox
+* dijit/form/NumberTextBox
+* dijit/form/SimpleTextarea
+* dijit/form/Textarea
+* dijit/form/TextBox
+* dijit/form/ValidationTextBox
+* dijit/form/MultiSelect (using option tags only - stores not implemented yet)
+* dijit/form/FilteringSelect (using options tags only - stores not implemented yet) 
+* dijit/form/Button
+* dijit/form/CheckBox
+* dijit/form/Form
+* dijit/form/RadioButton
 
 ## Dora::Helpers::TabsHelper 
 

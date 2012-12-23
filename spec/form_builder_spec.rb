@@ -30,7 +30,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should have a form element with the dijit Form type" do
       @html = with_form_for Project.new, :name
       @html.should have_tag_selector('form#new_project')
-        .with_dojo_type('dijit.form.Form')
+        .with_dojo_type('dijit/form/Form')
     end
 
     it "should have a form with an id and a data-dojo-id" do
@@ -77,7 +77,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a text field" do
       # html = with_form_for Project.new, :name
-      # html.should have_tag_selector('input#project_name').with_dojo_type('dijit.form.TextBox')
+      # html.should have_tag_selector('input#project_name').with_dojo_type('dijit/form/TextBox')
       @html.should have_tag_selector('input#project_name.string.required')
         .with_attr('type', 'text')
         .with_attr('name', 'project[name]')
@@ -86,7 +86,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a ValidationTextBox" do
       @html.should have_tag_selector('input#project_name')
-        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_type('dijit/form/ValidationTextBox')
         .with_dojo_props(:required => true)
     end
 
@@ -115,7 +115,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a regular text box for the dojo type" do
       @html.should have_tag_selector('input#project_summary')
-        .with_dojo_type('dijit.form.TextBox')
+        .with_dojo_type('dijit/form/TextBox')
     end
   end
 
@@ -127,17 +127,17 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a TimeTextBox" do
       @html.should have_tag_selector('input#project_start_time')
-        .with_dojo_type('dijit.form.TimeTextBox')
+        .with_dojo_type('dijit/form/TimeTextBox')
     end
   end
 
   # DATE INPUT
   context "with date attribute" do
     it "should generate a DateTextBox" do
-      @project = Factory(:project)
+      @project = build(:project)
       @html = with_form_for @project, :created_at
       @html.should have_tag_selector('input#project_created_at')
-        .with_dojo_type('dijit.form.DateTextBox')
+        .with_dojo_type('dijit/form/DateTextBox')
     end
   end
 
@@ -150,7 +150,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
       it "should generate a NumberTextBox" do
         @html.should have_tag_selector('input#project_importance')
-          .with_dojo_type('dijit.form.NumberTextBox')
+          .with_dojo_type('dijit/form/NumberTextBox')
       end
 
       it "should generate a NumberTextBox with constraints" do
@@ -177,13 +177,13 @@ describe "Dora::FormBuilder", :type => :helper do
   context "with currency input" do
     context "and constraints" do
       before(:each) do
-        @project = Factory(:project)
+        @project = build(:project)
         @html = with_form_for @project, :pay_rate, :as => :currency, :dojo_html => { :constraints => { :min => 1.0, :max => 100.00, :fractional => true } }
       end
 
       it "should generate a CurrencyTextBox" do
         @html.should have_tag_selector('input#project_pay_rate')
-          .with_dojo_type('dijit.form.CurrencyTextBox')
+          .with_dojo_type('dijit/form/CurrencyTextBox')
       end
 
       it "should generate a CurrencyTextBox with constraints" do
@@ -202,7 +202,7 @@ describe "Dora::FormBuilder", :type => :helper do
 
     it "should generate a TextBox with type=password" do
       @html.should have_tag_selector('input#project_password')
-        .with_dojo_type('dijit.form.TextBox')
+        .with_dojo_type('dijit/form/TextBox')
         .with_attr('type', 'password')
     end
   end
@@ -216,7 +216,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a TextBox with email regexp and message", :focus => true do
       @emailRe = '^[\\w!#%$*+=?`{|}~^-]+(?:[\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$'
       @html.should have_tag_selector('input#project_email')
-        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_type('dijit/form/ValidationTextBox')
         .with_dojo_props(:invalidMessage => 'Invalid email format.')
         .with_dojo_props(:regExp => @emailRe)
     end
@@ -231,7 +231,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a TextBox with phone regexp and message" do
       @phoneRe = '^[\\d(.)+\\s-]+$'
       @html.should have_tag_selector('input#project_phone')
-        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_type('dijit/form/ValidationTextBox')
         .with_dojo_props(:invalidMessage => 'Invalid phone format.')
         .with_dojo_props(:regExp => @phoneRe)
     end
@@ -239,47 +239,47 @@ describe "Dora::FormBuilder", :type => :helper do
 
   # TEXT AREA
   context "with text area input" do
-    it "should generate a TextArea with a style attribute" do
+    it "should generate a Textarea with a style attribute" do
       @html = with_form_for Project.new, :description, :input_html => {:style => 'width:300px'}
       @html.should have_tag_selector('textarea#project_description')
-        .with_dojo_type('dijit.form.TextArea')
+        .with_dojo_type('dijit/form/Textarea')
         .with_attr('style', 'width:300px')
     end
 
-    it "should generate a SimpleTextArea with a style attribute" do
+    it "should generate a SimpleTextarea with a style attribute" do
       @html = with_form_for Project.new, :description, :as => :text_simple
       @html.should have_tag_selector('textarea#project_description')
-        .with_dojo_type('dijit.form.SimpleTextArea')
+        .with_dojo_type('dijit/form/SimpleTextarea')
     end
   end
 
   # ASSOCIATIONS 
   context "with associations" do
     before(:each) do
-      @project = Factory(:project)
-      @task = Factory(:task)
-      @department = Factory(:department)
-      Task.stub(:all).and_return([@task, Factory(:task)])
-      Department.stub(:all).and_return([@department, Factory(:department)])
+      @project = create(:project)
+      @task = create(:task)
+      @department = create(:department)
+      Task.stub(:all).and_return([@task, create(:task)])
+      Department.stub(:all).and_return([@department, create(:department)])
     end
     it "should generate a CheckBox with a type=checkbox attribute" do
       @html = with_association_for @project, :tasks, :as => :check_boxes 
       @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
-        .with_dojo_type('dijit.form.CheckBox')
+        .with_dojo_type('dijit/form/CheckBox')
         .with_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
     end
 
     it "should generate a RadioButton with a type=radio attribute" do
-      @html = with_association_for Project.new, :tasks, :as => :radio 
+      @html = with_association_for Project.new, :tasks, :as => :radio_buttons
       @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
-        .with_dojo_type('dijit.form.RadioButton')
+        .with_dojo_type('dijit/form/RadioButton')
         .with_dojo_props(:type => 'radio', :name => 'project[task_ids]')
     end
 
     it "should generate a FilteringSelect box" do
       @html = with_association_for @project, :department
       @html.should have_tag_selector('select#project_department_id')
-        .with_dojo_type('dijit.form.FilteringSelect')
+        .with_dojo_type('dijit/form/FilteringSelect')
         .with_dojo_props(:value => @project.department.id.to_s)
     end
 
@@ -291,7 +291,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a MultiSelect" do
       @html = with_association_for @project, :tasks
       @html.should have_tag_selector('select#project_task_ids')
-        .with_dojo_type('dijit.form.MultiSelect')
+        .with_dojo_type('dijit/form/MultiSelect')
     end
 
     it "should generate a MultiSelect box with an option" do
@@ -308,7 +308,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should generate a ValidationTextBox" do
       @html = with_fields_for Project.new, :name
       @html.should have_tag_selector('input#project_name')
-        .with_dojo_type('dijit.form.ValidationTextBox')
+        .with_dojo_type('dijit/form/ValidationTextBox')
     end
 
     it "should not generate a surrounding form tag" do
@@ -322,7 +322,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should create a button element" do
       @html = with_button_for Project.new, :submit, :dojo_html => {:'data-disable-with' => 'Saving...'}
       @html.should have_tag_selector("form button.button")
-        .with_dojo_type('dijit.form.Button')
+        .with_dojo_type('dijit/form/Button')
         .with_dojo_props(:type => 'submit')
 
     end
@@ -330,7 +330,7 @@ describe "Dora::FormBuilder", :type => :helper do
     it "should create buttons for new records" do
       @html = with_button_for Project.new, :submit
       @html.should have_tag_selector("form button.button")
-        .with_dojo_type('dijit.form.Button')
+        .with_dojo_type('dijit/form/Button')
         .with_dojo_props(:type => 'submit')
     end
   end

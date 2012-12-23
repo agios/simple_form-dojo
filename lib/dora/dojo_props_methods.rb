@@ -72,7 +72,7 @@ module Dora
           dtype = 'password'
         when :check_boxes, :checkbox
           dtype = 'checkbox'
-        when :boolean, :radio
+        when :boolean, :radio, :radio_buttons
           dtype = 'radio'
         else
           dtype = 'text'
@@ -93,9 +93,9 @@ module Dora
       unless [:text, :text_simple].include?(input_type) 
         opts = input_html_options
         @dojo_props[:value] = opts.fetch("value") { value_before_type_cast(object, attribute_name) } unless input_type == "file"
-        char_subs = {
-          "'" => ""
-        }
+        #char_subs = {
+          #"'" => ""
+        #}
         # @dojo_props[:value] &&= html_escape(@dojo_props[:value]).gsub(/\'/, char_subs )
         @dojo_props[:value] &&= html_escape(@dojo_props[:value])
         @dojo_props.delete(:value) if @dojo_props[:value].nil?
@@ -112,7 +112,7 @@ module Dora
         when :boolean
           return (value.is_a?(String) && value.blank? ? nil : TRUE_VALUES.include?(value))
         else
-          if self.is_a? Dora::Inputs::CollectionInput
+          if self.is_a? SimpleForm::Inputs::CollectionInput
             return value
           else
             return value

@@ -24,7 +24,7 @@ module Dora
         case input_type
         when :check_boxes
           'dijit/form/CheckBox'
-        when :radio
+        when :radio_buttons
           'dijit/form/RadioButton'
         when :select
           (input_html_options.has_key?(:multiple) ? 'dijit/form/MultiSelect' : 'dijit/form/FilteringSelect')
