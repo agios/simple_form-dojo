@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Dora::FormBuilder", :type => :helper do
+describe "SimpleFormDojo::FormBuilder", :type => :helper do
   
   before(:each) do
     # helper.output_buffer = ""
@@ -22,7 +22,7 @@ describe "Dora::FormBuilder", :type => :helper do
   # FORM
   context "with form wrapper" do
 
-    it "should have a form element with a dora_form class" do
+    it "should have a form element with a dojo_form class" do
       @html = with_form_for Project.new, :name
       @html.should have_tag_selector('form')
     end
@@ -34,7 +34,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should have a form with an id and a data-dojo-id" do
-      data = helper.dora_form_for( Project.new, :html => { :id => 'my-test' } ) do |f|
+      data = helper.dojo_form_for( Project.new, :html => { :id => 'my-test' } ) do |f|
         f.input :name
       end
       html = concat(data)
@@ -43,7 +43,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should have a form with the proper action" do
-      data = helper.dora_form_for(Project.new, :html => { :id => 'my-test' }, :remote => true ) do |f|
+      data = helper.dojo_form_for(Project.new, :html => { :id => 'my-test' }, :remote => true ) do |f|
         f.input :name
       end
       html = concat(data)
@@ -54,7 +54,7 @@ describe "Dora::FormBuilder", :type => :helper do
     end
 
     it "should have a form with a put method" do
-      data = helper.dora_form_for(Project.new, :method => 'put', :html => { :id => 'my-test' }, :remote => true ) do |f|
+      data = helper.dojo_form_for(Project.new, :method => 'put', :html => { :id => 'my-test' }, :remote => true ) do |f|
         f.input :name
       end
       html = concat(data)
@@ -303,8 +303,8 @@ describe "Dora::FormBuilder", :type => :helper do
 
   end
 
-  # DORA_FIELDS_FOR
-  context "with dora_fields_for" do
+  # SIMPLE_FORM_DOJO_FIELDS_FOR
+  context "with dojo_fields_for" do
     it "should generate a ValidationTextBox" do
       @html = with_fields_for Project.new, :name
       @html.should have_tag_selector('input#project_name')

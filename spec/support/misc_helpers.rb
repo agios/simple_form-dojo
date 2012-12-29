@@ -6,15 +6,15 @@ def attr_value(field, element, attr)
 end
 
 def with_concat_args_form_for(object, *args, &block)
-  concat helper.dora_form_for(object, *args, &block)
+  concat helper.dojo_form_for(object, *args, &block)
 end
 
 def with_concat_form_for(object, &block)
-  concat helper.dora_form_for(object, &block)
+  concat helper.dojo_form_for(object, &block)
 end
 
 def with_concat_fields_for(object, &block)
-  concat helper.dora_fields_for(object, &block)
+  concat helper.dojo_fields_for(object, &block)
 end
 
 def with_args_form_for(object, *args, &block)

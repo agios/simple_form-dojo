@@ -1,4 +1,4 @@
-module Dora
+module SimpleFormDojo
   module Inputs
     # Uses MapType to handle basic input types. See the original simple_form 
     # source for details. 

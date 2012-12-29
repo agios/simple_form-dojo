@@ -1,7 +1,7 @@
 require 'action_view'
 
-module Dora
-  # = Dora Dojo Tabs Helper
+module SimpleFormDojo
+  # = SimpleFormDojo Dojo Tabs Helper
   module Helpers
     # Provides methods to generate HTML markup for dijit/layout/TabContainer objects 
     #
@@ -19,7 +19,7 @@ module Dora
       #
       # ==== Examples
       # 
-      #   <%= dora_tabs_for do |tab| %>
+      #   <%= dojo_tabs_for do |tab| %>
       #     <%= tab.create('Tab Title One') do %>
       #       #... tab contents
       #     <% end %>
@@ -29,9 +29,9 @@ module Dora
       #   # =>         ... tab contents
       #   # =>     </div>
       #   # => </div>
-      def dora_tabs_for( *options, &block )
+      def dojo_tabs_for( *options, &block )
         raise ArgumentError, "Missing block" unless block_given?
-        raw Dora::Helpers::TabsHelper::TabsRenderer.new( *options, &block ).render
+        raw SimpleFormDojo::Helpers::TabsHelper::TabsRenderer.new( *options, &block ).render
       end   
 
       class TabsRenderer
@@ -76,4 +76,4 @@ module Dora
   end
 end
 
-ActionView::Base.send(:include, Dora::Helpers::TabsHelper)
+ActionView::Base.send(:include, SimpleFormDojo::Helpers::TabsHelper)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Dora::FormBuilder", :type => :helper do
+describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
   context "with type=text" do
     before(:each) do

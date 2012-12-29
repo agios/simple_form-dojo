@@ -1,18 +1,18 @@
 # Provide a simple gemspec so you can easily use your enginex
 # project in your rails apps through git.
 $:.push File.expand_path("../lib", __FILE__)
-require "dora/version"
+require "simple_form-dojo/version"
 
 Gem::Specification.new do |s|
-  s.name        = "dora"
-  s.version     = Dora::VERSION
+  s.name        = "simple_form-dojo"
+  s.version     = SimpleFormDojo::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Patrick Ward"]
   s.email       = ["yawpcast@gmail.com"] 
   s.homepage    = "http://www.patrickward.com"
   s.summary     = "Dojo Toolkit helpers for Rails 3" 
-  s.description = "Dora is a collection of helpers for use with Dojo and Rails. The goal of the project is to make it simple to create Dijit elements using the existing Rails helper infrastructure."
-  s.rubyforge_project = "dora"
+  s.description = "SimpleFormDojo is a collection of helpers for use with Dojo and Rails. The goal of the project is to make it simple to create Dijit elements using the existing Rails helper infrastructure."
+  s.rubyforge_project = "simple_form-dojo"
 
   s.files       = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.markdown"]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3", "~> 1.3.6"
   s.add_development_dependency "factory_girl_rails", "~> 4.1.0"
   s.add_development_dependency "database_cleaner", "~> 0.9.1"
+  s.add_development_dependency "watchr"
 end

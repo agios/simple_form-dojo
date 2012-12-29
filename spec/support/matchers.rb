@@ -2,7 +2,7 @@
 # Matches selections with data-dojo-type
 # @html = with_form_for Project.new, :name
 # @html.should have_selection('div#project_name').with_dojo_type('dijit.form.TextBox')
-module Dora
+module SimpleFormDojo
   module RSpecMatchers
     module ActionView
       def have_tag_selector(tag_selector)
@@ -94,7 +94,7 @@ module Dora
         end
 
         def dojo_props_exist(props)
-          # Need to add the surrounding brackets back in, because Dora removes them before sending them 
+          # Need to add the surrounding brackets back in, because SimpleFormDojo removes them before sending them 
           # to input_html_options
           tag_props = ActiveSupport::JSON.decode("{#{@tag_selector_obj['data-dojo-props']}}").symbolize_keys
           missing_msgs = [] 
@@ -173,6 +173,6 @@ module Dora
   end
 end
 module RSpec::Matchers
-  include Dora::RSpecMatchers::ActionView
+  include SimpleFormDojo::RSpecMatchers::ActionView
 end
 

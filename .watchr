@@ -14,5 +14,5 @@ watch("spec/.*/*_spec.rb") do |match|
 end
 
 watch("lib/(.*/.*)\.rb") do |match|
-  run_spec %{spec/#{match[1].sub("dora/","")}_spec.rb}
+  run_spec %{spec/#{match[1].sub("simple_form-dojo/","")}_spec.rb}
 end

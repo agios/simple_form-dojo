@@ -1,4 +1,4 @@
-module Dora
+module SimpleFormDojo
   module Inputs
     class NumericInput < SimpleForm::Inputs::NumericInput
 

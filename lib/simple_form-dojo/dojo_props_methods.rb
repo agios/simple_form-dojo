@@ -1,6 +1,6 @@
 require 'set'
 
-module Dora
+module SimpleFormDojo
   module DojoPropsMethods
 
     FALSE_VALUES = [false, 0, '0', 'f', 'F', 'false', 'FALSE'].to_set
@@ -16,7 +16,7 @@ module Dora
       add_dojo_options_to_dojo_props 
       add_attributes_to_dojo_props
       # input_html_options[:'data-dojo-props'] = @builder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
-      input_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
+      input_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
     end
 
     private 

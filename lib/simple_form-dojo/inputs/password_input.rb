@@ -1,10 +1,8 @@
-module Dora
+module SimpleFormDojo
   module Inputs
-    class TextInput < SimpleForm::Inputs::TextInput
+    class PasswordInput < SimpleForm::Inputs::PasswordInput
       include DojoPropsMethods
       
-      #map_type :text_simple, :to => :text_area
-
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
         infer_dojo_props_from_validations!
@@ -15,11 +13,10 @@ module Dora
       protected
 
       def dojo_type 
-        case input_type
-        when :text
-          'dijit/form/Textarea'
-        when :text_simple
-          'dijit/form/SimpleTextarea'
+        if has_required?
+          'dijit/form/ValidationTextBox'
+        else
+          'dijit/form/TextBox'
         end
       end
 

@@ -1,20 +1,20 @@
-module Dora
+module SimpleFormDojo
   class FormBuilder < SimpleForm::FormBuilder
-    include Dora::Inputs
+    include SimpleFormDojo::Inputs
     # need to include this in order to 
     # get the html_escape method
     include ERB::Util
 
     attr_accessor :dojo_props
 
-    map_type :currency,                             :to => Dora::Inputs::CurrencyInput
-    map_type :date, :time, :datetime,               :to => Dora::Inputs::DateTimeInput
-    map_type :select, :radio_buttons, :check_boxes, :to => Dora::Inputs::CollectionInput
-    map_type :integer, :decimal, :float,            :to => Dora::Inputs::NumericInput
-    #map_type :password, :text, :text_simple, :file, :to => Dora::Inputs::MappingInput
-    map_type :string, :email, :search, :tel, :url,  :to => Dora::Inputs::StringInput
-    map_type :text, :text_simple,                   :to => Dora::Inputs::TextInput
-    map_type :password,                             :to => Dora::Inputs::PasswordInput
+    map_type :currency,                             :to => SimpleFormDojo::Inputs::CurrencyInput
+    map_type :date, :time, :datetime,               :to => SimpleFormDojo::Inputs::DateTimeInput
+    map_type :select, :radio_buttons, :check_boxes, :to => SimpleFormDojo::Inputs::CollectionInput
+    map_type :integer, :decimal, :float,            :to => SimpleFormDojo::Inputs::NumericInput
+    #map_type :password, :text, :text_simple, :file, :to => SimpleFormDojo::Inputs::MappingInput
+    map_type :string, :email, :search, :tel, :url,  :to => SimpleFormDojo::Inputs::StringInput
+    map_type :text, :text_simple,                   :to => SimpleFormDojo::Inputs::TextInput
+    map_type :password,                             :to => SimpleFormDojo::Inputs::PasswordInput
 
     # Simple override of initializer in order to add in the dojo_props attribute
     def initialize(object_name, object, template, options, proc)
@@ -26,12 +26,12 @@ module Dora
     # 
     # overrides simple_form's button method
     # 
-    # dora_form_for @user do |f|
+    # dojo_form_for @user do |f|
     #   f.button :submit, :value => 'Save Me'
     # end
     #
     # To use dojox/form/BusyButton, pass :busy => true
-    # dora-for_for @uswer do |f|
+    # dojo_form_for @uswer do |f|
     #   f.button :submit, :busy => true, :value => 'Save Me'
     # end
     #
@@ -51,7 +51,7 @@ module Dora
       end
       dojo_props = { :type => type, :value => content }
       dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
-      options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(dojo_props)
+      options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(dojo_props)
       options[:class] = "button #{options[:class]}".strip
       template.content_tag(:button, content, *(args << options), &block)
     end
@@ -89,7 +89,7 @@ module Dora
 
         # add in the dojo_props[:value]
         local_dojo_props[:value] = html_escape(value.to_s)
-        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
+        default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
         
         builder = instantiate_builder(SimpleForm::ActionViewExtensions::RadioButtonBuilder, attribute, item, value, text, default_html_options)
         
@@ -117,7 +117,7 @@ module Dora
         default_html_options[:multiple] = true
         # add in the dojo_props[:value]
         local_dojo_props[:value] = html_escape(value.to_s)
-        default_html_options[:'data-dojo-props'] = Dora::FormBuilder.encode_as_dojo_props(local_dojo_props)
+        default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props)
         
         builder = instantiate_builder(SimpleForm::ActionViewExtensions::CheckBoxBuilder, attribute, item, value, text, default_html_options)
         
