@@ -264,39 +264,39 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
     it "should generate a CheckBox with a type=checkbox attribute" do
       @html = with_association_for @project, :tasks, :as => :check_boxes 
-      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
         .with_dojo_type('dijit/form/CheckBox')
         .with_dojo_props(:type => 'checkbox', :name => 'project[task_ids][]')
     end
 
     it "should generate a RadioButton with a type=radio attribute" do
-      @html = with_association_for Project.new, :tasks, :as => :radio_buttons
-      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+      @html = with_association_for @project, :tasks, :as => :radio_buttons
+      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
         .with_dojo_type('dijit/form/RadioButton')
         .with_dojo_props(:type => 'radio', :name => 'project[task_ids]')
     end
 
     it "should generate a FilteringSelect box" do
       @html = with_association_for @project, :department
-      @html.should have_tag_selector('select#project_department_id')
+      @html.should have_tag_selector("select#project_#{@project.id}_department_id")
         .with_dojo_type('dijit/form/FilteringSelect')
         .with_dojo_props(:value => @project.department.id.to_s)
     end
 
     it "should generate a FilteringSelect box with an option" do
       @html = with_association_for @project, :department
-      @html.should have_tag_selector(%Q(select#project_department_id > option[value="#{@department.id}"]))
+      @html.should have_tag_selector(%Q(select#project_#{@project.id}_department_id > option[value="#{@department.id}"]))
     end
 
     it "should generate a MultiSelect" do
       @html = with_association_for @project, :tasks
-      @html.should have_tag_selector('select#project_task_ids')
+      @html.should have_tag_selector("select#project_#{@project.id}_task_ids")
         .with_dojo_type('dijit/form/MultiSelect')
     end
 
     it "should generate a MultiSelect box with an option" do
       @html = with_association_for @project, :tasks
-      @html.should have_tag_selector(%Q(select#project_task_ids > option[value="#{@task.id}"]))
+      @html.should have_tag_selector(%Q(select#project_#{@project.id}_task_ids > option[value="#{@task.id}"]))
     end
 
     it "should generate a ComboBox"

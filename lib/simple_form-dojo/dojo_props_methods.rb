@@ -15,6 +15,7 @@ module SimpleFormDojo
     def get_and_merge_dojo_props!
       add_dojo_options_to_dojo_props 
       add_attributes_to_dojo_props
+      add_dojo_compliant_id if object.id.present?
       # input_html_options[:'data-dojo-props'] = @builder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
       input_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
     end
@@ -23,7 +24,7 @@ module SimpleFormDojo
 
     ##
     # Retrieves dojo props from :dojo_html => {} options 
-    def add_dojo_options_to_dojo_props 
+    def add_dojo_options_to_dojo_props
       @dojo_props ||= {}
       @dojo_props.merge!(html_options_for(:dojo, []))
     end
@@ -48,10 +49,8 @@ module SimpleFormDojo
       opts = input_html_options
       if opts.has_key?("index")
         @dojo_props[:name] ||= dojo_tag_name_with_index(opts["index"])
-        # @dojo_props[:id] = opts.fetch("id") { dojo_tag_id_with_index(opts["index"]) }
       else
         @dojo_props[:name] ||= dojo_tag_name + (add_multiple_to_name?(opts) ? '[]' : '')
-        # @dojo_props[:id] ||= opts.fetch("id") { dojo_tag_id }
       end
     end
 
@@ -81,12 +80,12 @@ module SimpleFormDojo
       @dojo_props[:type] = dtype unless dtype.nil? 
     end
 
-    def dojo_tag_name_with_index(index)
-      "#{object_name}[#{index}][#{sanitized_attribute_name}]"
+    def dojo_tag_name
+      "#{object_name}[#{sanitized_attribute_name}]"
     end
 
-    def dojo_tag_id_with_index(index)
-      "#{sanitized_object_name}_#{index}_#{sanitized_attribute_name}"
+    def dojo_tag_name_with_index(index)
+      "#{object_name}[#{index}][#{sanitized_attribute_name}]"
     end
 
     def add_value_to_dojo_props
@@ -121,12 +120,24 @@ module SimpleFormDojo
       end
     end
 
-    def dojo_tag_name
-      "#{object_name}[#{sanitized_attribute_name}]"
+    def tag_id index = nil
+      id = sanitized_object_name
+      id << "_#{object.id}"
+      id << index if index
+      id << "_#{sanitized_attribute_name}"
+      id
     end
 
-    def dojo_tag_id
-      "#{sanitized_object_name}_#{sanitized_attribute_name}"
+    def add_dojo_compliant_id
+      opts = input_html_options
+      if opts.has_key?("index")
+        opts["id"] = opts.fetch("id"){ tag_id opts["index"] }
+        opts.delete("index")
+      elsif defined?(@auto_index)
+        opts["id"] = opts.fetch("id"){ tag_id @auto_index }
+      else
+        opts["id"] = opts.fetch("id"){ tag_id }
+      end
     end
 
     def sanitized_attribute_name

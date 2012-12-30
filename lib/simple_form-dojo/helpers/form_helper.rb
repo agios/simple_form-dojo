@@ -56,4 +56,3 @@ module SimpleFormDojo
   end
 end
 ActionView::Base.send(:include, SimpleFormDojo::Helpers::FormHelper)
-

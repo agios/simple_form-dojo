@@ -58,9 +58,9 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
     it "should have a boolean radio set with the correct value" do
       @html = with_form_for @task, :complete, :as => :radio_buttons
-      @html.should have_tag_selector("input#task_complete_true")
+      @html.should have_tag_selector("input#task_#{@task.id}_complete_true")
         .with_dojo_props(:value => 'true')
-      @html.should have_tag_selector("input#task_complete_false")
+      @html.should have_tag_selector("input#task_#{@task.id}_complete_false")
         .with_dojo_props(:value => 'false')
     end
   end
@@ -74,13 +74,13 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
     it "should have a CheckBox with the correct value" do
       @html = with_association_for @project, :tasks, :as => :check_boxes
-      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
         .with_dojo_props(:value => @task.id.to_s)
     end
 
     it "should have a Radio button with the correct value" do
       @html = with_association_for @project, :tasks, :as => :radio_buttons
-      @html.should have_tag_selector("input#project_task_ids_#{@task.id}")
+      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
         .with_dojo_props(:value => @task.id.to_s)
     end
 

@@ -91,6 +91,9 @@ module SimpleFormDojo
         local_dojo_props[:value] = html_escape(value.to_s)
         default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
         
+        # append the object id to the html id
+        default_html_options["id"] = "#{html_options["id"]}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}" if html_options["id"].present?
+
         builder = instantiate_builder(SimpleForm::ActionViewExtensions::RadioButtonBuilder, attribute, item, value, text, default_html_options)
         
         if block_given?
@@ -119,6 +122,9 @@ module SimpleFormDojo
         local_dojo_props[:value] = html_escape(value.to_s)
         default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props)
         
+        # append the object id to the html id
+        default_html_options["id"] = "#{html_options["id"]}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}" if html_options["id"].present?
+
         builder = instantiate_builder(SimpleForm::ActionViewExtensions::CheckBoxBuilder, attribute, item, value, text, default_html_options)
         
         if block_given?
