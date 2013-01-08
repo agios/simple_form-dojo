@@ -7,5 +7,6 @@ module SimpleFormDojo
     autoload :PasswordInput,                'simple_form-dojo/inputs/password_input'
     autoload :CollectionInput,              'simple_form-dojo/inputs/collection_input'
     autoload :CurrencyInput,                'simple_form-dojo/inputs/currency_input'
+    autoload :BooleanInput,                 'simple_form-dojo/inputs/boolean_input'
   end
 end

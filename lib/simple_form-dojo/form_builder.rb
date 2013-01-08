@@ -15,6 +15,7 @@ module SimpleFormDojo
     map_type :string, :email, :search, :tel, :url,  :to => SimpleFormDojo::Inputs::StringInput
     map_type :text, :text_simple,                   :to => SimpleFormDojo::Inputs::TextInput
     map_type :password,                             :to => SimpleFormDojo::Inputs::PasswordInput
+    map_type :boolean,                              :to => SimpleFormDojo::Inputs::BooleanInput
 
     # Simple override of initializer in order to add in the dojo_props attribute
     def initialize(object_name, object, template, options, proc)
@@ -160,6 +161,7 @@ module SimpleFormDojo
           store = qrs(qrs_id, path)
         end
       end
+
       store.html_safe + super(association, options, &block)
     end
 

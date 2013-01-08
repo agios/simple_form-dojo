@@ -204,7 +204,6 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
   end
 
-
   # PHONE
   context "with phone input" do
     before(:each) do
@@ -215,6 +214,18 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       @html.should have_tag('input#project_phone', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
         with_dojo_props(:invalidMessage => "'Invalid phone format.'", :regExp => @phoneRe)
       end
+    end
+  end
+
+  # BOOLEAN
+  context "with boolean input" do
+    before(:each) do
+      @task = create(:task)
+      @html = with_form_for @task, :complete
+    end
+
+    it "should generate a CheckBox", :focus => true do
+      @html.should have_tag("input", with: {:'data-dojo-type' => 'dijit/form/CheckBox', :id => "task_#{@task.id}_complete"})
     end
   end
 
@@ -241,7 +252,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       Department.stub(:all).and_return([@department, create(:department)])
     end
     it "should generate a CheckBox with a type=checkbox attribute" do
-      @html = with_association_for @project, :tasks, :as => :check_boxes 
+      @html = with_association_for @project, :tasks, :as => :check_boxes
       @html.should have_tag("input#project_#{@project.id}_task_ids_#{@task.id}", 
           with: {:'data-dojo-type' => 'dijit/form/CheckBox', :type => 'checkbox', :name => 'project[task_ids][]'})
     end
