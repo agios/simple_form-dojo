@@ -1,8 +1,8 @@
 module SimpleFormDojo
   module Inputs
     class StringInput < SimpleForm::Inputs::StringInput
-
       include DojoPropsMethods
+      EMAIL_REGEXP="^[\\\\w!#%$*+=?`{|}~^-]+(?:[\\\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$"
 
       def input
         input_html_options[:'data-dojo-type'] ||= dojo_type 
@@ -26,12 +26,11 @@ module SimpleFormDojo
         @dojo_props.merge!(:required => true) if has_required?
         case input_type
         when :email
-          # @dojo_props[:regExp] ||= '^[\w!#%$*+=?`{|}~^-]+(?:[\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$'
-          @dojo_props[:regExp] ||= "^[\\w!#%$*+=?`{|}~^-]+(?:[\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"
-          @dojo_props[:invalidMessage] = 'Invalid email format.'
+          @dojo_props[:regExp] ||= "'#{EMAIL_REGEXP}'"
+          @dojo_props[:invalidMessage] = "'Invalid email format.'"
         when :tel
-          @dojo_props[:regExp] ||= "^[\\d(.)+\\s-]+$"
-          @dojo_props[:invalidMessage] = 'Invalid phone format.'
+          @dojo_props[:regExp] ||= "'^[\\\\d(.)+\\\\s-]+$'"
+          @dojo_props[:invalidMessage] = "'Invalid phone format.'"
         end
       end
       

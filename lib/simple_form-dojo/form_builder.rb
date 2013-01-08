@@ -49,7 +49,8 @@ module SimpleFormDojo
       else
         content = button_default_value
       end
-      dojo_props = { :type => type, :value => content }
+      options.reverse_merge!({ :type => type, :value => content })
+      dojo_props = {}
       dojo_props.merge!(options[:dojo_html]) if options.include?(:dojo_html)
       options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(dojo_props)
       options[:class] = "button #{options[:class]}".strip
@@ -68,7 +69,6 @@ module SimpleFormDojo
 
       defaults = []
       defaults << "helpers.submit.#{object_name}.#{key}"
-      # defaults << "helpers.submit.#{key}"
       defaults << "#{key.to_s.humanize} #{model}"
 
       I18n.t(defaults.shift, :default => defaults)
@@ -87,8 +87,6 @@ module SimpleFormDojo
           #default_html_options[:checked] = "checked"
         #end
 
-        # add in the dojo_props[:value]
-        local_dojo_props[:value] = html_escape(value.to_s)
         default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props) if !local_dojo_props.nil?
         
         # append the object id to the html id
@@ -118,8 +116,7 @@ module SimpleFormDojo
           #default_html_options[:checked] = "checked"
         #end
         default_html_options[:multiple] = true
-        # add in the dojo_props[:value]
-        local_dojo_props[:value] = html_escape(value.to_s)
+
         default_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(local_dojo_props)
         
         # append the object id to the html id
@@ -136,20 +133,70 @@ module SimpleFormDojo
       wrap_rendered_collection(rendered_collection, options)
     end
 
+    # Adds support for Ajax remote FilteringSelect using a QueryReadStore
+    #
+    # == Example
+    #
+    #   simple_form_for @user do |f|
+    #     f.association :company, :remote_path => '/companies/qrs'
+    #   end
+    #   # Will create a QueryReadStore linked to a FilteringSelect
+    #
+    def association(association, options={}, &block)
+      options = options.dup
+      reflection = find_association_reflection(association)
+      raise "Association #{association.inspect} not found" unless reflection
+      store = ""
+      if reflection.macro == :belongs_to
+        options[:input_html] ||= {}
+        attribute = (reflection.respond_to?(:options) && reflection.options[:foreign_key]) || :"#{reflection.name}_id"
+        options[:input_html][:value] ||= object.send(attribute)
+        options[:dojo_html] ||= {}
+        if options[:remote_path] && !options[:dojo_html][:store]
+          options[:collection] = [] #Prevent collections from being loaded
+          qrs_id = "#{object_name.to_s.underscore}_#{object.id.to_s.gsub(/[^\w]/, "")}_#{association}_qrs"
+          path = options.delete(:remote_path)
+          options[:dojo_html][:store] = qrs_id
+          store = qrs(qrs_id, path)
+        end
+      end
+      store.html_safe + super(association, options, &block)
+    end
+
+    # Creates a Dojo QueryReadStore
+    #
+    # dojo_form_for @user do |f|
+    #   f.qrs :company_qrs, '/companies/qrs'
+    # end
+    def qrs id, path, dojo_props = {}
+      dojo_props = dojo_props.dup
+      options = {:'data-dojo-type' => 'dojox/data/QueryReadStore'}
+      dojo_props[:url] = "'#{path}'"
+      options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(dojo_props)
+      options[:'data-dojo-id'] = id
+      options[:style] ||= "display: none;"
+      template.content_tag(:span, nil, options)
+    end
+
     ## 
-    # JSON encodes the props hash, 
-    # then translates double-quotes to single-quotes, 
-    # then translates double-backslashes to single-backslashes for regex issues, 
-    # then removes the surrounding brackets ({...}) from the result 
-    # All of this is required in order to place this into a 
-    # string format compatible with data-dojo-props parsing
+    # The dojo props string is evaluated as javascript,
+    # can therefore contain any valid javascript object
+    # and cannot be encoded as JSON
     def self.encode_as_dojo_props(options)
-      ActiveSupport::JSON.encode(options)
-        .to_s
+      encode_obj(options)
         .slice(1..-2)
-        # .tr('"',"'")
-        # .gsub(/\\\\/, '\\')
-        # .slice(1..-2)
+        .html_safe
+    end
+
+    def self.encode_obj(obj)
+      case obj
+      when Hash
+        "{#{obj.collect{|k, v| "#{k}:#{encode_obj(v)}"}.join(', ')}}"
+      when Array
+        "[#{obj.collect{|v| encode_obj(v)}.join(', ')}]"
+      else
+        obj.to_s
+      end
     end
 
     private

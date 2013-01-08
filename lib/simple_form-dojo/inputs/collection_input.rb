@@ -32,6 +32,8 @@ module SimpleFormDojo
       end
 
       def infer_dojo_props_from_validations!
+        @dojo_props ||= {}
+        @dojo_props.merge!(:required => has_required?)
       end
 
     end

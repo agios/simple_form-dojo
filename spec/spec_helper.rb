@@ -3,7 +3,7 @@ require 'spork'
 require 'active_record'
 require 'nokogiri'
 require 'factory_girl_rails' 
-require 'database_cleaner' 
+require 'database_cleaner'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -103,6 +103,7 @@ RSpec.configure do |config|
   # Remove this line if you don't want RSpec's should and should_not
   # methods or matchers
   require 'rspec/expectations'
+  require 'rspec-html-matchers'
   config.include RSpec::Matchers
 
   # == Mock Framework

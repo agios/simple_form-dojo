@@ -4,50 +4,49 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
   context "with type=text" do
     before(:each) do
-      @project = build(:project)
+      @project = create(:project)
     end
 
     it "should have the correct value for a string textbox" do
       @html = with_form_for @project, :name
-      @html.should have_tag_selector('form input#project_name')
-        .with_dojo_props(:value => @project.name)
+      @html.should have_dojo_form "/projects/#{@project.id}", :post do
+        with_tag 'input', with: {name: 'project[name]', type: 'text', id: "project_#{@project.id}_name", value: @project.name}
+      end
     end
 
     it "should have the correct value for a number textbox" do
       @html = with_form_for @project, :pay_rate
-      @html.should have_tag_selector('form input#project_pay_rate')
-        .with_dojo_props(:value => @project.pay_rate.to_s)
+      @html.should have_dojo_form "/projects/#{@project.id}", :post do
+        with_tag 'input', with: {name: 'project[pay_rate]', type: 'text', id: "project_#{@project.id}_pay_rate", value: @project.pay_rate}
+      end
     end
 
     it "should have the correct value for a time textbox" do
       @html = with_form_for @project, :start_time
-      @html.should have_tag_selector('form input#project_start_time')
-        .with_dojo_props(:value => @project.start_time.to_s)
+      @html.should have_dojo_form "/projects/#{@project.id}", :post do
+        with_tag 'input', with: {name: 'project[start_time]', type: 'text', id: "project_#{@project.id}_start_time", value: @project.start_time}
+      end
     end
 
     it "should have the correct value for a password textbox" do
       @html = with_form_for @project, :password
-      @html.should have_tag_selector('form input#project_password')
-        .with_dojo_props(:value => @project.password)
+      @html.should have_dojo_form "/projects/#{@project.id}", :post do
+        with_tag 'input', with: {name: 'project[password]', type: 'password', id: "project_#{@project.id}_password"}
+        without_tag 'input', with: {value: @project.password}
+      end
     end
   end
 
   context "with Textarea" do
     before(:each) do
-      @project = build(:project)
+      @project = create(:project)
     end
 
     it "should have a SimpleTextarea with a value in the right place" do
       @html = with_form_for @project, :description, :as => :text_simple
-      @html.should have_tag_selector('textarea#project_description')
-        .with_dojo_type('dijit/form/SimpleTextarea')
-        .with_content(@project.description)
-    end
-
-    it "should not have a value='' in data-dojo-props for a SimpleTextareas" do
-      @html = with_form_for @project, :description, :as => :text_simple
-      @html.should have_tag_selector('textarea#project_description')
-        .without_dojo_props(:value => @project.description)
+      @html.should have_dojo_form "/projects/#{@project.id}", :post do
+        with_dojo_text_area 'project[description]', @project.description, with: {id: "project_#{@project.id}_description"}
+      end
     end
   end
 
@@ -58,10 +57,10 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
     it "should have a boolean radio set with the correct value" do
       @html = with_form_for @task, :complete, :as => :radio_buttons
-      @html.should have_tag_selector("input#task_#{@task.id}_complete_true")
-        .with_dojo_props(:value => 'true')
-      @html.should have_tag_selector("input#task_#{@task.id}_complete_false")
-        .with_dojo_props(:value => 'false')
+      @html.should have_dojo_form "/tasks", :post do
+        with_radio_button 'task[complete]', true
+        with_radio_button 'task[complete]', false
+      end
     end
   end
 
@@ -74,14 +73,12 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
     it "should have a CheckBox with the correct value" do
       @html = with_association_for @project, :tasks, :as => :check_boxes
-      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
-        .with_dojo_props(:value => @task.id.to_s)
+      @html.should have_tag 'input', with: {id: "project_#{@project.id}_task_ids_#{@task.id}", :value => @task.id}
     end
 
     it "should have a Radio button with the correct value" do
       @html = with_association_for @project, :tasks, :as => :radio_buttons
-      @html.should have_tag_selector("input#project_#{@project.id}_task_ids_#{@task.id}")
-        .with_dojo_props(:value => @task.id.to_s)
+      @html.should have_tag 'input', with: {id: "project_#{@project.id}_task_ids_#{@task.id}", :value => @task.id}
     end
 
   end

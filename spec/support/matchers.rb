@@ -1,60 +1,57 @@
-## 
-# Matches selections with data-dojo-type
-# @html = with_form_for Project.new, :name
-# @html.should have_selection('div#project_name').with_dojo_type('dijit.form.TextBox')
+require_relative 'js_options_parser'
+
 module SimpleFormDojo
   module RSpecMatchers
     module ActionView
-      def have_tag_selector(tag_selector)
-        TagMatcher.new(tag_selector)
+      def have_dojo_props scope, props
+        raise ArgumentError, 'this matcher does not accept block' if block_given?
+        DojoPropsMatcher.new(scope, props)
       end
 
-      class TagMatcher #:nodoc:
-        def initialize(tag_selector)
-          @tag_selector = tag_selector
+      def with_dojo_props props
+        raise StandardError, 'this matcher should be used inside "have_tag" matcher block' unless defined?(@__current_scope_for_nokogiri_matcher)
+        raise ArgumentError, 'this matcher does not accept block' if block_given?
+        @__current_scope_for_nokogiri_matcher.should have_dojo_props(@__current_scope_for_nokogiri_matcher.instance_variable_get(:@current_scope), props)
+      end
+
+      def have_dojo_form text, value=nil, options={}
+        options[:with] ||= {}
+        with_button text, value, options
+      end
+
+      def have_dojo_form action_url, method, options={}, &block
+        options[:with] ||= {}
+        options[:with].merge!(:'data-dojo-type' => 'dijit/form/Form')
+        have_form action_url, method, options, &block
+      end
+
+      def with_dojo_button text, value=nil, options={}
+        options[:with] ||= {}
+        options[:with].merge!(:'data-dojo-type' => 'dijit/form/Button')
+        with_button text, value, options
+      end
+
+      def with_dojo_text_area name, text=nil, options={}
+        if text.is_a?(Hash)
+          options.merge!(text)
+          text=nil
+        end
+        options[:with] ||= {}
+        options[:with].reverse_merge!({:name => name, :'data-dojo-type' => 'dijit/form/SimpleTextarea'})
+        @__current_scope_for_nokogiri_matcher.should have_tag('textarea', options) do
+          with_text(/#{Regexp.escape(text)}/) if text
+        end
+      end
+
+      class DojoPropsMatcher
+        def initialize scope, props
+          @scope = scope
+          @dojo_props = props
+          @dojo_props_data = @scope.attr('data-dojo-props')
         end
 
-        def with_dojo_type(type)
-          @dojo_type = type
-          self
-        end
-
-        # Expects a hash in props
-        def with_dojo_props(props)
-          @dojo_props ||= {}
-          @dojo_props.merge!(props.symbolize_keys)
-          self
-        end
-
-        # Expects a hash in props
-        # - the negative of with, this 
-        # method looks to ensure that the properties 
-        # do not exist within data-dojo-props
-        def without_dojo_props(props)
-          @dojo_props_without ||= {}
-          @dojo_props_without.merge!(props.symbolize_keys)
-          self
-        end
-
-        def with_attr(name, value)
-          @attr_name = name
-          @attr_value = value
-          self
-        end
-
-        def with_content(value)
-          @tag_content = value
-          self
-        end
-
-        def matches?(subject)
-          @subject = subject
-          tag_selection_exists? &&
-            dojo_type_exists? && 
-            dojo_props_exist? &&
-            dojo_props_do_not_exist? &&
-            content_exists? &&
-            attribute_exists?(@attr_name, @attr_value)
+        def matches? document, &block
+          dojo_props_data_present? && dojo_props_exist?
         end
 
         def failure_message_for_should
@@ -65,8 +62,13 @@ module SimpleFormDojo
           message( "Did not expect #{expectation}" )
         end
 
+        def dojo_props_data_present?
+          @missing = "\nNo data-dojo-props tag was found." unless @dojo_props_data.present?
+          @dojo_props_data.present?
+        end
+
         def message(msg)
-          msg += "\nSubject was #{@subject}"
+          msg += "\nSubject was #{@scope.to_html}"
         end
 
         def description
@@ -76,40 +78,25 @@ module SimpleFormDojo
         end
 
         protected
-
-        def dojo_type_exists?
-          @dojo_type.nil? || attribute_exists?('data-dojo-type', @dojo_type)
-        end
-
         def dojo_props_exist?
           @dojo_props.nil? || dojo_props_exist(@dojo_props)
         end
 
-        def dojo_props_do_not_exist?
-          @dojo_props_without.nil? || !dojo_props_exist(@dojo_props_without)
-        end
-
-        def content_exists?
-          @tag_content.nil? || content_exists
-        end
-
         def dojo_props_exist(props)
-          # Need to add the surrounding brackets back in, because SimpleFormDojo removes them before sending them 
-          # to input_html_options
-          tag_props = ActiveSupport::JSON.decode("{#{@tag_selector_obj['data-dojo-props']}}").symbolize_keys
+          tag_props = parse_dojo_props(@dojo_props_data.value)
           missing_msgs = [] 
           if props.all? do |(key,value)|
-              # if tag_props.has_key?(key) && tag_props[key].to_s == props[key].to_s
-              if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(value)
-                true
-              else
-                missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
-                missing_msgs << "\nTag Props: #{key} => '#{tag_props[key]}'" if tag_props.has_key?(key)
-                missing_msgs << "\nExpected Props: #{key} => '#{value}'"
-                false
-              end
+            # if tag_props.has_key?(key) && tag_props[key].to_s == props[key].to_s
+            if tag_props.has_key?(key) && stringify(tag_props[key]) == stringify(value)
+              true
+            else
+              missing_msgs << "\nTag Props: NO KEY for '#{key}'" if !tag_props.has_key?(key)
+              missing_msgs << "\nTag Props: #{key} => '#{tag_props[key]}'" if tag_props.has_key?(key)
+              missing_msgs << "\nExpected Props: #{key} => '#{value}'"
+              false
             end
-            true
+          end
+          true
           else
             @missing = missing_msgs.join(',')
             false
@@ -120,53 +107,22 @@ module SimpleFormDojo
           if value.is_a? Hash
             value.stringify_keys.sort_by{ |k,v| k.to_s }.to_s
           else
-            value
+            value.to_s
           end
         end
-        
-        # converts a sring like 'require:true, sometype:"type", "anothertype":"type"' 
-        # to a hash like { :required => "true", :sometype: "type", :anothertype => "type"}
+
+        # converts a sring like 'require:true, sometype:'type', anothertype:function() {}' 
+        # to a hash like { :required => "true", :sometype: "'type'", :anothertype => "function() {}"}
         def to_hash(s)
-          # Hash[*s.scan(/(?:'|")?(\w+)(?:'|")?\s*:\s*(?:'|")?(\w+)(?:'|")?/).to_a.flatten].symbolize_keys!
-          Hash[*s.scan(/(?:'|")?([^']+)(?:'|")?\s*:\s*(?:'|")?([^']+)(?:'|")?(?:,)?/).to_a.flatten].symbolize_keys!
+          Hash[*s.scan(/\s*([^:]+)\s*:\s*([^,]+)\s*(?:,)?/).to_a.flatten].symbolize_keys!
         end
 
-        def content_exists
-          if !@tag_selector_obj.content.nil? && @tag_selector_obj.content.strip == @tag_content.strip
-            true
-          else
-            @missing = "\nContent not found!"
-            @missing += "\nFound: #{@tag_selector_obj.content}"
-            @missing += "\nExpected: #{@tag_content}"
-            false
-          end
-        end
-        
-        def attribute_exists?(name, value)
-          name.nil? || if @tag_selector_obj[name] == value
-            true
-          else
-            @missing = "\nIncorrect attribute: #{@tag_selector_obj[name]} != #{value}" 
-            false
-          end
-        end
-
-        def tag_selection_exists?
-          if find_tag_selection.nil?
-            @missing = "'#{@tag_selector}' could not be found."
-            false
-          else
-            true
-          end
-        end
-        
-        def find_tag_selection
-          html = Nokogiri::HTML(@subject)
-          @tag_selector_obj = html.at(@tag_selector)
+        def parse_dojo_props(s)
+          JsOptionsParser.parse_hash(s)
         end
 
         def expectation
-          "Selection to have tag matching '#{@tag_selector}'"
+          "to have dojo props '#{@dojo_props}'"
         end
       end
     end
