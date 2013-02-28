@@ -14,7 +14,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     @dojo_props = {
       :promptMessage => "'This value is required'", 
       :invalidMessage => "'Missing value'", 
-      :regExp => @regex, 
+      :pattern => @regex, 
       :tooltipPosition => 'right' 
     }
   end
@@ -84,8 +84,8 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       it_should_have_dojo_props(:invalidMessage => @dojo_props[:invalidMessage])
     end
 
-    it "should generate a ValidationTextBox with a regExp property" do
-      it_should_have_dojo_props(:regExp => @regex)
+    it "should generate a ValidationTextBox with a pattern property" do
+      it_should_have_dojo_props(:pattern => @regex)
     end
 
     it "should generate a ValidationTextBox with a tooltip property" do
@@ -199,7 +199,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     it "should generate a TextBox with email regexp and message", :focus => true do
       @emailRe = "'^[\\\\w!#%$*+=?`{|}~^-]+(?:[\\\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$'"
       @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
-        with_dojo_props(:invalidMessage => "'Invalid email format.'", :regExp => @emailRe)
+        with_dojo_props(:invalidMessage => "'Invalid email format.'", :pattern => @emailRe)
       end
     end
   end
@@ -212,7 +212,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     it "should generate a TextBox with phone regexp and message" do
       @phoneRe = "'^[\\\\d(.)+\\\\s-]+$'"
       @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
-        with_dojo_props(:invalidMessage => "'Invalid phone format.'", :regExp => @phoneRe)
+        with_dojo_props(:invalidMessage => "'Invalid phone format.'", :pattern => @phoneRe)
       end
     end
   end

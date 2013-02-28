@@ -26,10 +26,10 @@ module SimpleFormDojo
         @dojo_props.merge!(:required => true) if has_required?
         case input_type
         when :email
-          @dojo_props[:regExp] ||= "'#{EMAIL_REGEXP}'"
+          @dojo_props[:pattern] ||= "'#{EMAIL_REGEXP}'"
           @dojo_props[:invalidMessage] = "'Invalid email format.'"
         when :tel
-          @dojo_props[:regExp] ||= "'^[\\\\d(.)+\\\\s-]+$'"
+          @dojo_props[:pattern] ||= "'^[\\\\d(.)+\\\\s-]+$'"
           @dojo_props[:invalidMessage] = "'Invalid phone format.'"
         end
       end
