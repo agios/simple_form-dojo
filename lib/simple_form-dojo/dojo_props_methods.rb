@@ -4,7 +4,11 @@ module SimpleFormDojo
     # Retrieves and merges all dojo_props
     def get_and_merge_dojo_props!
       add_dojo_options_to_dojo_props 
-      add_dojo_compliant_id if object.id.present?
+      if object.id.present?
+        add_dojo_compliant_id
+      else
+        input_html_options["id"] = nil #let dojo generate internal id
+      end
       input_html_options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(@dojo_props) if !@dojo_props.blank?
     end
 

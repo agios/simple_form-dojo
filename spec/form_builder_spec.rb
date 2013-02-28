@@ -57,7 +57,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
   context "with required string attribute" do
 
     def it_should_have_dojo_props(props)
-      @html.should have_tag('input#project_name') do
+      @html.should have_tag('input') do
         with_dojo_props(props)
       end
     end
@@ -67,11 +67,11 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
 
     it "should generate a text field" do
-      @html.should have_tag('input#project_name.string.required', with: {type: 'text', name: 'project[name]', size: 50})
+      @html.should have_tag('input.string.required', with: {type: 'text', name: 'project[name]', size: 50})
     end
 
     it "should generate a ValidationTextBox" do
-      @html.should have_tag('input#project_name', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
         with_dojo_props(:required => true)
       end
     end
@@ -100,7 +100,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
 
     it "should generate a regular text box for the dojo type" do
-      @html.should have_tag('input#project_summary', with: {:'data-dojo-type' => 'dijit/form/TextBox'})
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/TextBox'})
     end
   end
 
@@ -111,7 +111,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
 
     it "should generate a TimeTextBox" do
-      @html.should have_tag('input#project_start_time', with: {:'data-dojo-type' => 'dijit/form/TimeTextBox'})
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/TimeTextBox'})
     end
   end
 
@@ -120,7 +120,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     it "should generate a DateTextBox" do
       @project = build(:project)
       @html = with_form_for @project, :created_at
-      @html.should have_tag('input#project_created_at', with: {:'data-dojo-type' => 'dijit/form/DateTextBox'})
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/DateTextBox'})
     end
   end
 
@@ -132,11 +132,11 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       end
 
       it "should generate a NumberTextBox" do
-        @html.should have_tag('input#project_importance', with: {:'data-dojo-type' => 'dijit/form/NumberTextBox'})
+        @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/NumberTextBox'})
       end
 
       it "should generate a NumberTextBox with constraints" do
-        @html.should have_tag('input#project_importance') do
+        @html.should have_tag('input') do
           with_dojo_props(:constraints => {:min => 30, :max => 100})
         end
       end
@@ -145,13 +145,13 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     context " and constraints based off of validations " do
       it "should generate a NumberTextBox with min/max constraints" do
         @html = with_form_for Project.new, :importance
-        @html.should have_tag('input#project_importance') do
+        @html.should have_tag('input') do
           with_dojo_props(:constraints => {:min => 1, :max => 5, :places => 0 })
         end
       end
       it "should override constraints with dojo_html" do
         @html = with_form_for Project.new, :importance, :dojo_html => { :constraints => { :min => 2, :max => 20 } }
-        @html.should have_tag('input#project_importance') do
+        @html.should have_tag('input') do
           with_dojo_props(:constraints => { :min => 2, :max => 20 })
         end
       end
@@ -167,11 +167,11 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       end
 
       it "should generate a CurrencyTextBox" do
-        @html.should have_tag('input#project_pay_rate', with: {:'data-dojo-type' => 'dijit/form/CurrencyTextBox'})
+        @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/CurrencyTextBox'})
       end
 
       it "should generate a CurrencyTextBox with constraints" do
-        @html.should have_tag('input#project_pay_rate') do
+        @html.should have_tag('input') do
           with_dojo_props(:constraints => { :min => 1.0, :max => 100.00, :fractional => true })
         end
       end
@@ -186,7 +186,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
 
     it "should generate a TextBox with type=password" do
-      @html.should have_tag('input#project_password', with: {:'data-dojo-type' => 'dijit/form/TextBox', :type => 'password'})
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/TextBox', :type => 'password'})
     end
   end
 
@@ -198,7 +198,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
 
     it "should generate a TextBox with email regexp and message", :focus => true do
       @emailRe = "'^[\\\\w!#%$*+=?`{|}~^-]+(?:[\\\\w!#%$*+=?`{|}~^.-])*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$'"
-      @html.should have_tag('input#project_email', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
         with_dojo_props(:invalidMessage => "'Invalid email format.'", :regExp => @emailRe)
       end
     end
@@ -211,7 +211,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
     end
     it "should generate a TextBox with phone regexp and message" do
       @phoneRe = "'^[\\\\d(.)+\\\\s-]+$'"
-      @html.should have_tag('input#project_phone', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'}) do
         with_dojo_props(:invalidMessage => "'Invalid phone format.'", :regExp => @phoneRe)
       end
     end
@@ -233,12 +233,12 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
   context "with text area input" do
     it "should generate a Textarea with a style attribute" do
       @html = with_form_for Project.new, :description, :input_html => {:style => 'width:300px'}
-      @html.should have_tag('textarea#project_description', with: {:'data-dojo-type' => 'dijit/form/Textarea', :style => 'width:300px'})
+      @html.should have_tag('textarea', with: {:'data-dojo-type' => 'dijit/form/Textarea', :style => 'width:300px'})
     end
 
     it "should generate a SimpleTextarea with a style attribute" do
       @html = with_form_for Project.new, :description, :as => :text_simple
-      @html.should have_tag('textarea#project_description', with: {:'data-dojo-type' => 'dijit/form/SimpleTextarea'})
+      @html.should have_tag('textarea', with: {:'data-dojo-type' => 'dijit/form/SimpleTextarea'})
     end
   end
 
@@ -300,7 +300,7 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
   context "with dojo_fields_for" do
     it "should generate a ValidationTextBox" do
       @html = with_fields_for Project.new, :name
-      @html.should have_tag('input#project_name', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'})
+      @html.should have_tag('input', with: {:'data-dojo-type' => 'dijit/form/ValidationTextBox'})
     end
 
     it "should not generate a surrounding form tag" do
