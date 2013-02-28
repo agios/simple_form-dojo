@@ -1,4 +1,5 @@
 require_relative 'js_options_parser'
+require 'awesome_print'
 
 module SimpleFormDojo
   module RSpecMatchers
@@ -47,7 +48,7 @@ module SimpleFormDojo
         def initialize scope, props
           @scope = scope
           @dojo_props = props
-          @dojo_props_data = @scope.attr('data-dojo-props')
+          @dojo_props_data = @scope.detect(@scope){|s| s.attribute('data-dojo-props')}.attribute('data-dojo-props')
         end
 
         def matches? document, &block

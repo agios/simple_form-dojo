@@ -93,7 +93,7 @@ module SimpleFormDojo
         # append the object id to the html id
         default_html_options["id"] = "#{html_options["id"]}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}" if html_options["id"].present?
 
-        builder = instantiate_builder(SimpleForm::ActionViewExtensions::RadioButtonBuilder, attribute, item, value, text, default_html_options)
+        builder = instantiate_collection_builder(SimpleForm::ActionViewExtensions::RadioButtonBuilder, attribute, item, value, text, default_html_options)
         
         if block_given?
           yield builder
@@ -123,7 +123,7 @@ module SimpleFormDojo
         # append the object id to the html id
         default_html_options["id"] = "#{html_options["id"]}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}" if html_options["id"].present?
 
-        builder = instantiate_builder(SimpleForm::ActionViewExtensions::CheckBoxBuilder, attribute, item, value, text, default_html_options)
+        builder = instantiate_collection_builder(SimpleForm::ActionViewExtensions::CheckBoxBuilder, attribute, item, value, text, default_html_options)
         
         if block_given?
           yield builder
