@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.name        = "simple_form-dojo"
   s.version     = SimpleFormDojo::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Patrick Ward"]
-  s.email       = ["yawpcast@gmail.com"] 
-  s.homepage    = "http://www.patrickward.com"
+  s.authors     = ["Alex Giouzenis", "Patrick Ward"]
+  s.email       = ["alexandrosg@gmail.com"] 
+  s.homepage    = "https://github.com/agios/simple_form-dojo"
   s.summary     = "Dojo Toolkit helpers for Rails 3" 
   s.description = "SimpleFormDojo is a collection of helpers for use with Dojo and Rails. The goal of the project is to make it simple to create Dijit elements using the existing Rails helper infrastructure."
   s.rubyforge_project = "simple_form-dojo"

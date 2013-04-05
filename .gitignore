@@ -10,3 +10,4 @@ spec/dummy/public/javascripts/dojo*
 *~
 .DS_Store
 .rvmrc
+.ruby-version
