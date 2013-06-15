@@ -271,15 +271,11 @@ describe "SimpleFormDojo::FormBuilder", :type => :helper do
       end
     end
 
-    it "should generate a FilteringSelect box with a QueryReadStore" do
-      @html = with_association_for @project, :department, :remote_path => '/departments/qrs'
+    it "should generate a FilteringSelect box without extra options when a store is given" do
+      @html = with_association_for @project, :department, :dojo_html => {store: 'a_store'}
       @html.should have_tag("select#project_#{@project.id}_department_id", 
-              with: {:'data-dojo-type' => 'dijit/form/FilteringSelect', :value => @project.department.id}) do
-          with_dojo_props store: "project_#{@project.id}_department_qrs"
-      end
-      @html.should have_tag("span", with: {:'data-dojo-id' => "project_#{@project.id}_department_qrs", :'data-dojo-type' => 'dojox/data/QueryReadStore'}) do
-          with_dojo_props url: "'/departments/qrs'" 
-      end
+              with: {:'data-dojo-type' => 'dijit/form/FilteringSelect', :value => @project.department.id})
+      @html.should have_tag('option', count: 1)
     end
 
     it "should generate a MultiSelect" do

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_form-dojo (0.0.1)
+    simple_form-dojo (0.0.3)
       simple_form (~> 2.1.0)
 
 GEM

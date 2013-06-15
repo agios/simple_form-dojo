@@ -134,53 +134,22 @@ module SimpleFormDojo
       wrap_rendered_collection(rendered_collection, options)
     end
 
-    # Adds support for Ajax remote FilteringSelect using a QueryReadStore
-    #
-    # == Example
-    #
-    #   simple_form_for @user do |f|
-    #     f.association :company, :remote_path => '/companies/qrs'
-    #   end
-    #   # Will create a QueryReadStore linked to a FilteringSelect
-    #
     def association(association, options={}, &block)
       options = options.dup
       reflection = find_association_reflection(association)
       raise "Association #{association.inspect} not found" unless reflection
-      store = ""
       if reflection.macro == :belongs_to
         options[:input_html] ||= {}
+        options[:dojo_html] ||= {}
         attribute = (reflection.respond_to?(:options) && reflection.options[:foreign_key]) || :"#{reflection.name}_id"
         options[:input_html][:value] ||= object.send(attribute)
-        options[:dojo_html] ||= {}
-        if options[:remote_path] && !options[:dojo_html][:store]
-          options[:collection] = [] #Prevent collections from being loaded
-          qrs_id = "#{object_name.to_s.underscore}_#{object.id.to_s.gsub(/[^\w]/, "")}_#{association}_qrs"
-          path = options.delete(:remote_path)
-          options[:dojo_html][:store] = qrs_id
-          store = qrs(qrs_id, path)
-        end
+        #Prevent collections from being loaded if using a store
+        options[:collection] = [] if options[:dojo_html][:store]
       end
-
-      store.html_safe + super(association, options, &block)
+      super(association, options, &block)
     end
 
-    # Creates a Dojo QueryReadStore
-    #
-    # dojo_form_for @user do |f|
-    #   f.qrs :company_qrs, '/companies/qrs'
-    # end
-    def qrs id, path, dojo_props = {}
-      dojo_props = dojo_props.dup
-      options = {:'data-dojo-type' => 'dojox/data/QueryReadStore'}
-      dojo_props[:url] = "'#{path}'"
-      options[:'data-dojo-props'] = SimpleFormDojo::FormBuilder.encode_as_dojo_props(dojo_props)
-      options[:'data-dojo-id'] = id
-      options[:style] ||= "display: none;"
-      template.content_tag(:span, nil, options)
-    end
-
-    ## 
+    ##
     # The dojo props string is evaluated as javascript,
     # can therefore contain any valid javascript object
     # and cannot be encoded as JSON
