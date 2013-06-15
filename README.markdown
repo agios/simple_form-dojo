@@ -88,3 +88,6 @@ Pass additional HTML options to either the parent DIV or any child tab's:
   
 The default DOM ID for the parent div is 'id="tabs"' unless you pass an HTML option with a different value.
 
+## Code status
+
+[![Build Status](https://travis-ci.org/agios/simple_form-dojo.png)](https://travis-ci.org/agios/simple_form-dojo)
