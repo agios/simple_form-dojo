@@ -8,9 +8,9 @@ The TabsHelper was inspired by code from CodeOfficer's [JQuery UI Helpers](https
 
 ## Requirements 
 
-SimpleFormDojo is based on Dojo 1.6.0 and uses the newer data-dojo-type and data-dojo-props attributes in order to be more compliant with HTML 5. It is being developed against the latest version of Rails (currently 3.0.5). 
+SimpleFormDojo is based on Dojo 1.9.0 and uses the newer data-dojo-type and data-dojo-props attributes in order to be more compliant with HTML 5. It is being developed against Rails 3.2 and SimpleForm 2.1. 
 
-I don't include the 1.6 dojo toolkit files in the git repository. So, to run the dummy test rails environment you'll need to [grab a copy](http://download.dojotoolkit.org/) of the toolkit files and place them in the spec/dummy/public/javascripts/ directory to run the physical rails tests and see the generated markup correctly.
+The dojo toolkit files are not included in the repository. So, to run the dummy test rails environment you'll need to [grab a copy](http://download.dojotoolkit.org/) of the toolkit files and place them in the spec/dummy/public/javascripts/ directory to run the physical rails tests and see the generated markup correctly.
 
 ## SimpleFormDojo::FormBuilder 
 
@@ -40,7 +40,7 @@ Documentation is TBD, but in general, it works the same way that simple_form wor
 * dijit/form/TextBox
 * dijit/form/ValidationTextBox
 * dijit/form/MultiSelect (using option tags only - stores not implemented yet)
-* dijit/form/FilteringSelect (using options tags only - stores not implemented yet) 
+* dijit/form/FilteringSelect
 * dijit/form/Button
 * dijit/form/CheckBox
 * dijit/form/Form
