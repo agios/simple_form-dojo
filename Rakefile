@@ -24,6 +24,8 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+Bundler::GemHelper.install_tasks
+
 desc "Run watchr"
 task :watchr do
   sh %{bundle exec watchr .watchr}
