@@ -142,7 +142,7 @@ module SimpleFormDojo
         options[:input_html] ||= {}
         options[:dojo_html] ||= {}
         attribute = (reflection.respond_to?(:options) && reflection.options[:foreign_key]) || :"#{reflection.name}_id"
-        options[:input_html][:value] ||= object.send(attribute)
+        options[:input_html][:value] ||= object.send(attribute).as_json
         #Prevent collections from being loaded if using a store
         options[:collection] = [] if options[:dojo_html][:store]
       end
